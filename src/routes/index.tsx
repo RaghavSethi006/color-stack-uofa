@@ -205,7 +205,7 @@ function Index() {
             <ol className="border-t">
               {c.join.steps.map((s, i) => (
                 <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b py-6">
-                  <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "cobalt", "yellow"][i]) }}>{i + 1}</span>
+                  <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "cobalt", "yellow"][i] ?? "ink") }}>{i + 1}</span>
                   <div>
                     <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
                     {s.body && <p className="mb-4 text-mute">{s.body}</p>}
