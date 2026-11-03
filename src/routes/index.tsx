@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import * as Acc from "@radix-ui/react-accordion";
-import { Moon, Sun } from "lucide-react";
 import logo from "@/assets/colorstack-uofa-logo.png.asset.json";
 import { content as c } from "@/content";
 import { COLORSTACK_URL, EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SIGNUP_URL, SLACK_URL } from "@/config";
@@ -38,22 +37,6 @@ function Label({ children }: { children: ReactNode }) {
   return <p className="mono mb-4 text-mute">{children}</p>;
 }
 
-function ThemeToggle() {
-  const [dark, setDark] = useState(false);
-  useEffect(() => setDark(document.documentElement.classList.contains("dark")), []);
-  const toggle = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  };
-  return (
-    <button onClick={toggle} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} className="grid h-11 w-11 place-items-center border-2 border-transparent hover:border-ink">
-      {dark ? <Sun size={18} /> : <Moon size={18} />}
-    </button>
-  );
-}
-
 function Brand() {
   return (
     <a href="#top" className="flex min-w-0 items-center gap-3 font-semibold">
@@ -63,7 +46,19 @@ function Brand() {
   );
 }
 
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
+
 function Index() {
+  useReveal();
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
     <div id="top">
@@ -73,7 +68,6 @@ function Index() {
           {c.nav.map((n) => (
             <a key={n.href} href={n.href} className="hidden px-3 py-2 text-[15px] font-medium hover:underline hover:underline-offset-4 sm:inline-block">{n.label}</a>
           ))}
-          <ThemeToggle />
           <a href="#join" className="btn btn-solid !px-4 !py-2">Join</a>
         </nav>
       </header>
@@ -98,8 +92,8 @@ function Index() {
                 <a href="#programs" className="btn btn-outline">{c.hero.secondary}</a>
               </div>
             </div>
-            <div className="self-start border-2 border-ink">
-              <div className="flex items-center justify-between border-b-2 border-ink px-4 py-3">
+            <div className="brut self-start">
+              <div className="flex items-center justify-between border-b-3 border-ink bg-yellow px-4 py-3">
                 <span className="mono">{c.hero.cardLabel}</span>
                 <span className="flex gap-1">
                   {["orange", "cobalt", "yellow", "green"].map((k) => <span key={k} className="h-2.5 w-2.5" style={{ background: colorVar(k) }} />)}
@@ -117,10 +111,16 @@ function Index() {
           </div>
         </section>
 
-        <div className="stack-bar" aria-hidden="true" />
+        <div className="marquee" aria-hidden="true">
+          <div>
+            {[0, 1].map((k) => ticker.map((t) => (
+              <span key={k + t} className="mono flex items-center gap-4 px-4 py-3 text-[14px] font-medium text-ink">{t}<span className="h-2.5 w-2.5 bg-ink" /></span>
+            )))}
+          </div>
+        </div>
 
         {/* ABOUT */}
-        <section id="about" className="wrap grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+        <section id="about" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
           <div>
             <Label>{c.about.label}</Label>
             <h2 className="h2">{c.about.title}</h2>
@@ -131,7 +131,7 @@ function Index() {
         </section>
 
         {/* PROGRAMS */}
-        <section id="programs" className="wrap pb-24 md:pb-32">
+        <section id="programs" className="wrap reveal pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
           <h2 className="h2 mb-12">{c.programs.title}</h2>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
@@ -150,7 +150,7 @@ function Index() {
 
         {/* SUMMIT */}
         <section id="summit" className="slab bg-slab py-20 text-slab-fg md:py-24">
-          <div className="wrap">
+          <div className="wrap reveal">
             <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
               <div>
                 <p className="font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
@@ -178,16 +178,16 @@ function Index() {
         </section>
 
         {/* LEADERSHIP */}
-        <section id="leadership" className="wrap grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+        <section id="leadership" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
           <div>
             <Label>{c.leadership.label}</Label>
             <h2 className="h2 mb-5">{c.leadership.title}</h2>
             <p className="mb-8 text-mute">{c.leadership.line}</p>
             <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
           </div>
-          <dl className="border-t">
+          <dl className="wire bg-background px-5 py-2">
             {c.leadership.roles.map(([r, d]) => (
-              <div key={r} className="grid gap-1 border-b py-4 sm:grid-cols-[10rem_1fr] sm:gap-4">
+              <div key={r} className="grid gap-1 border-b border-dashed py-4 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:gap-4">
                 <dt className="mono pt-[3px]">{r}</dt>
                 <dd className="text-mute">{d}</dd>
               </div>
@@ -196,15 +196,15 @@ function Index() {
         </section>
 
         {/* JOIN */}
-        <section id="join" className="wrap pb-24 md:pb-32">
+        <section id="join" className="wrap reveal pb-24 md:pb-32">
           <div className="grid gap-10 md:grid-cols-2 md:gap-16">
             <div>
               <Label>{c.join.label}</Label>
               <h2 className="h2">{c.join.title}</h2>
             </div>
-            <ol className="border-t">
+            <ol className="brut px-5">
               {c.join.steps.map((s, i) => (
-                <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b py-6">
+                <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-dashed py-6 last:border-b-0">
                   <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "cobalt", "yellow"][i] ?? "ink") }}>{i + 1}</span>
                   <div>
                     <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
@@ -223,9 +223,9 @@ function Index() {
             </ol>
           </div>
 
-          <Acc.Root type="single" collapsible className="mt-16 border-t md:ml-[calc(50%+2rem)]">
+          <Acc.Root type="single" collapsible className="wire mt-16 bg-background px-5 md:ml-[calc(50%+2rem)]">
             {c.join.faqs.map((f) => (
-              <Acc.Item key={f.q} value={f.q} className="border-b">
+              <Acc.Item key={f.q} value={f.q} className="border-b border-dashed last:border-b-0">
                 <Acc.Header>
                   <Acc.Trigger className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold hover:text-cobalt">
                     {f.q}
