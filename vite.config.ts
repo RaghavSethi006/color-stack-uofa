@@ -12,4 +12,8 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // Pre-bundle Radix with React in the first pass so a late re-optimization can't load a second React copy.
+    optimizeDeps: { include: ["@radix-ui/react-accordion", "lucide-react"] },
+  },
 });
