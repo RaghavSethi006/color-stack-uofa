@@ -1,24 +1,258 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
+import * as Acc from "@radix-ui/react-accordion";
+import { Moon, Sun } from "lucide-react";
+import logo from "@/assets/colorstack-uofa-logo.png.asset.json";
+import { content as c } from "@/content";
+import { COLORSTACK_URL, EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SIGNUP_URL, SLACK_URL } from "@/config";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "ColorStack UofA | Black and Latinx students in computing" },
+      { name: "description", content: "The University of Alberta chapter of ColorStack. A community for Black and Latinx students in computing, run by students in Edmonton." },
+      { property: "og:title", content: "ColorStack UofA" },
+      { property: "og:description", content: "A community for Black and Latinx students in computing at the University of Alberta." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+const colorVar = (k: string) => `var(--${k})`;
+
+function Ext({ href, children, className = "", button }: { href: string; children: ReactNode; className?: string; button?: boolean }) {
+  if (!href) {
+    return <span className={`mono text-mute ${button ? "inline-block py-3" : ""}`} aria-disabled="true">{typeof children === "string" ? `${children}: ` : ""}{c.comingSoon}</span>;
+  }
+  const isMail = href.startsWith("mailto:");
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <a href={href} className={className} {...(isMail ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
+      {children}
+    </a>
+  );
+}
+
+function Label({ children }: { children: ReactNode }) {
+  return <p className="mono mb-4 text-mute">{children}</p>;
+}
+
+function ThemeToggle() {
+  const [dark, setDark] = useState(false);
+  useEffect(() => setDark(document.documentElement.classList.contains("dark")), []);
+  const toggle = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
+  return (
+    <button onClick={toggle} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} className="grid h-11 w-11 place-items-center border-2 border-transparent hover:border-ink">
+      {dark ? <Sun size={18} /> : <Moon size={18} />}
+    </button>
+  );
+}
+
+function Brand() {
+  return (
+    <a href="#top" className="flex min-w-0 items-center gap-3 font-semibold">
+      <img src={logo.url} alt="" className="h-8 w-8 shrink-0" width={32} height={32} />
+      <span className="truncate">{c.brand}</span>
+    </a>
+  );
+}
+
+function Index() {
+  const mail = EMAIL ? `mailto:${EMAIL}` : "";
+  return (
+    <div id="top">
+      <header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
+        <Brand />
+        <nav className="flex items-center gap-1 sm:gap-2" aria-label="Main">
+          {c.nav.map((n) => (
+            <a key={n.href} href={n.href} className="hidden px-3 py-2 text-[15px] font-medium hover:underline hover:underline-offset-4 sm:inline-block">{n.label}</a>
+          ))}
+          <ThemeToggle />
+          <a href="#join" className="btn btn-solid !px-4 !py-2">Join</a>
+        </nav>
+      </header>
+
+      <main>
+        {/* HERO */}
+        <section className="wrap pb-16 pt-8 md:pb-24 md:pt-14">
+          <p className="mono mb-6 text-mute">{c.hero.kicker}</p>
+          <h1 className="mb-12 md:mb-16">
+            <span className="sr-only">{c.hero.srTitle}</span>
+            <span className="wordmark" aria-hidden="true">
+              {["l1", "l2", "l3"].map((l) => (
+                <span key={l} className={l}>COLOR<br className="br" />STACK</span>
+              ))}
+            </span>
+          </h1>
+          <div className="grid gap-12 min-[860px]:grid-cols-[1.25fr_1fr] min-[860px]:gap-16">
+            <div>
+              <p className="max-w-[30ch] text-[22px] font-medium leading-[1.35] md:text-[28px]">{c.hero.lead}</p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <a href="#join" className="btn btn-solid">{c.hero.primary}</a>
+                <a href="#programs" className="btn btn-outline">{c.hero.secondary}</a>
+              </div>
+            </div>
+            <div className="self-start border-2 border-ink">
+              <div className="flex items-center justify-between border-b-2 border-ink px-4 py-3">
+                <span className="mono">{c.hero.cardLabel}</span>
+                <span className="flex gap-1">
+                  {["orange", "cobalt", "yellow", "green"].map((k) => <span key={k} className="h-2.5 w-2.5" style={{ background: colorVar(k) }} />)}
+                </span>
+              </div>
+              <dl>
+                {c.hero.rows.map(([k, v], i) => (
+                  <div key={k} className={`grid grid-cols-[7.5rem_1fr] gap-3 px-4 py-3 ${i ? "border-t" : ""}`}>
+                    <dt className="mono pt-[3px] text-mute">{k}</dt>
+                    <dd className="text-[15px] leading-snug">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <div className="stack-bar" aria-hidden="true" />
+
+        {/* ABOUT */}
+        <section id="about" className="wrap grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+          <div>
+            <Label>{c.about.label}</Label>
+            <h2 className="h2">{c.about.title}</h2>
+          </div>
+          <div className="prose-cs space-y-5 text-mute md:pt-9">
+            {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
+          </div>
+        </section>
+
+        {/* PROGRAMS */}
+        <section id="programs" className="wrap pb-24 md:pb-32">
+          <Label>{c.programs.label}</Label>
+          <h2 className="h2 mb-12">{c.programs.title}</h2>
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+            {c.programs.items.map((p) => (
+              <article key={p.name} className="layer-card" style={{ ["--c" as string]: colorVar(p.color) }}>
+                <p className="mono mb-6 flex items-center gap-2">
+                  <span className="h-3.5 w-3.5 shrink-0" style={{ background: colorVar(p.color) }} />
+                  Layer / {p.name}
+                </p>
+                <h3 className="mb-3 font-display text-[26px] leading-[1.02]" style={{ fontVariationSettings: '"wdth" 78, "wght" 800' }}>{p.title}</h3>
+                <p className="text-[15px] text-mute">{p.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* SUMMIT */}
+        <section id="summit" className="slab bg-slab py-20 text-slab-fg md:py-24">
+          <div className="wrap">
+            <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
+              <div>
+                <p className="font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
+                <p className="mono mt-4 opacity-80">{c.summit.caption}</p>
+              </div>
+              <div className="md:pt-6">
+                <p className="mono mb-4 opacity-80">{c.summit.label}</p>
+                <h2 className="h2 mb-6">{c.summit.title}</h2>
+                <p className="prose-cs opacity-85">{c.summit.body}</p>
+                <p className="mono mt-8 mb-2 opacity-70">{c.summit.supportLabel}</p>
+                <p className="prose-cs">{c.summit.supporters.join(", ")}.</p>
+              </div>
+            </div>
+            <svg viewBox="0 0 1000 170" className="mt-14 w-full" role="img" aria-label={`Route from Edmonton (${c.summit.route.from}) to San Francisco (${c.summit.route.to}), ${c.summit.route.distance}`}>
+              <path d="M40 140 Q500 -40 960 140" fill="none" stroke="var(--slab-fg)" strokeWidth="1.5" strokeDasharray="6 8" />
+              <circle cx="40" cy="140" r="8" fill="var(--yellow)" />
+              <circle cx="960" cy="140" r="8" fill="var(--yellow)" />
+              <g fill="var(--slab-fg)" fontFamily="DM Mono, monospace" fontSize="15" letterSpacing="1.5">
+                <text x="40" y="168" textAnchor="middle">{c.summit.route.from}</text>
+                <text x="960" y="168" textAnchor="middle">{c.summit.route.to}</text>
+                <text x="500" y="38" textAnchor="middle">{c.summit.route.distance.toUpperCase()}</text>
+              </g>
+            </svg>
+          </div>
+        </section>
+
+        {/* LEADERSHIP */}
+        <section id="leadership" className="wrap grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+          <div>
+            <Label>{c.leadership.label}</Label>
+            <h2 className="h2 mb-5">{c.leadership.title}</h2>
+            <p className="mb-8 text-mute">{c.leadership.line}</p>
+            <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
+          </div>
+          <dl className="border-t">
+            {c.leadership.roles.map(([r, d]) => (
+              <div key={r} className="grid gap-1 border-b py-4 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                <dt className="mono pt-[3px]">{r}</dt>
+                <dd className="text-mute">{d}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {/* JOIN */}
+        <section id="join" className="wrap pb-24 md:pb-32">
+          <div className="grid gap-10 md:grid-cols-2 md:gap-16">
+            <div>
+              <Label>{c.join.label}</Label>
+              <h2 className="h2">{c.join.title}</h2>
+            </div>
+            <ol className="border-t">
+              {c.join.steps.map((s, i) => (
+                <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b py-6">
+                  <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "cobalt", "yellow"][i]) }}>{i + 1}</span>
+                  <div>
+                    <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
+                    {s.body && <p className="mb-4 text-mute">{s.body}</p>}
+                    {i === 0 && <Ext href={COLORSTACK_URL} className="btn btn-solid mt-1">{s.cta}</Ext>}
+                    {i === 1 && <div className="mt-2"><Ext href={SIGNUP_URL} className="btn btn-solid" button>{s.cta}</Ext></div>}
+                    {i === 2 && (
+                      <div className="flex flex-wrap gap-x-6 gap-y-2">
+                        <Ext href={SLACK_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Slack</Ext>
+                        <Ext href={INSTAGRAM_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Instagram</Ext>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <Acc.Root type="single" collapsible className="mt-16 border-t md:ml-[calc(50%+2rem)]">
+            {c.join.faqs.map((f) => (
+              <Acc.Item key={f.q} value={f.q} className="border-b">
+                <Acc.Header>
+                  <Acc.Trigger className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold hover:text-cobalt">
+                    {f.q}
+                    <span className="faq-plus font-mono text-2xl leading-none" aria-hidden="true">+</span>
+                  </Acc.Trigger>
+                </Acc.Header>
+                <Acc.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                  <p className="prose-cs pb-5 text-mute">{f.a}</p>
+                </Acc.Content>
+              </Acc.Item>
+            ))}
+          </Acc.Root>
+        </section>
+      </main>
+
+      <div className="stack-bar" aria-hidden="true" />
+      <footer className="wrap grid gap-6 py-12">
+        <Brand />
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
+          <Ext href={INSTAGRAM_URL} className="hover:text-cobalt hover:underline">Instagram</Ext>
+          <Ext href={mail} className="hover:text-cobalt hover:underline">Email</Ext>
+          <Ext href={LINKEDIN_URL} className="hover:text-cobalt hover:underline">LinkedIn</Ext>
+          <Ext href={COLORSTACK_URL} className="hover:text-cobalt hover:underline">ColorStack National</Ext>
+        </nav>
+        <p className="text-mute">{c.footer.line}</p>
+        <p className="mono text-mute">{c.footer.copyright}</p>
+      </footer>
     </div>
   );
 }
