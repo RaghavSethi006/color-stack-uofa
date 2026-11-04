@@ -68,7 +68,7 @@ function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
     <div id="top">
-      <div className="invert border-b-3 border-ink"><header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
+      <div className="zone-dark border-b-3 border-ink"><header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
         <Brand />
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Main">
           {c.nav.map((n) => (
@@ -127,7 +127,7 @@ function Index() {
         </div>
 
         {/* ABOUT */}
-        <div className="invert"><div aria-hidden="true" className="dither" />
+        <div className="zone-dark"><div aria-hidden="true" className="dither" />
         <section id="about" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
           <div>
             <Label>{c.about.label}</Label>
@@ -166,7 +166,7 @@ function Index() {
         </section>
 
         {/* SUMMIT */}
-        <section id="summit" className="slab invert bg-slab py-20 text-slab-fg md:py-24">
+        <section id="summit" className="slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
           <div className="wrap reveal">
             <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
               <div className="relative isolate">
@@ -215,7 +215,7 @@ function Index() {
 
         {/* JOIN */}
         <div className="op-stripes green" aria-hidden="true" />
-        <div className="invert"><section id="join" className="wrap reveal py-24 md:py-32">
+        <div className="zone-dark"><section id="join" className="wrap reveal py-24 md:py-32">
           <div className="grid gap-10 md:grid-cols-2 md:gap-16">
             <div>
               <Label>{c.join.label}</Label>
@@ -261,7 +261,7 @@ function Index() {
       </main>
 
       <div className="stack-bar" aria-hidden="true" />
-      <div className="invert"><footer className="wrap grid gap-6 py-12">
+      <div className="zone-dark"><footer className="wrap grid gap-6 py-12">
         <pre aria-hidden="true" className="ascii">{ASCII}</pre>
         <Brand />
         <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">

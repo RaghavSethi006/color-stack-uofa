@@ -202,15 +202,15 @@
 [data-state="open"] > .faq-plus { transform: rotate(45deg); }
 
 /* Inverted black zones: components re-theme automatically */
-.invert {
+.zone-dark {
   --bg: #050806; --bg-2: #0e1410; --ink: #f4f6ee; --mute: #a9b7ad;
   --line: rgba(244, 246, 238, 0.22); --grid: rgba(198, 216, 58, 0.07);
   background-color: var(--bg); color: var(--ink);
   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 32px 32px;
 }
-.invert .btn-solid { box-shadow: 4px 4px 0 var(--orange); }
-.invert .layer-card, .invert .brut { box-shadow: 8px 8px 0 var(--c, var(--orange)); }
+.zone-dark .btn-solid { box-shadow: 4px 4px 0 var(--orange); }
+.zone-dark .layer-card, .zone-dark .brut { box-shadow: 8px 8px 0 var(--c, var(--orange)); }
 
 /* Retro halftone dots */
 .halftone { position: relative; isolation: isolate; }
