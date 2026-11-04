@@ -200,3 +200,61 @@
 
 .faq-plus { transition: transform 0.2s ease; }
 [data-state="open"] > .faq-plus { transform: rotate(45deg); }
+
+/* Inverted black zones: components re-theme automatically */
+.zone-dark {
+  --bg: #050806; --bg-2: #0e1410; --ink: #f4f6ee; --mute: #a9b7ad;
+  --line: rgba(244, 246, 238, 0.22); --grid: rgba(198, 216, 58, 0.07);
+  background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.zone-dark .btn-solid { box-shadow: 4px 4px 0 var(--orange); }
+.zone-dark .layer-card, .zone-dark .brut { box-shadow: 8px 8px 0 var(--c, var(--orange)); }
+
+/* Retro halftone dots */
+.halftone { position: relative; isolation: isolate; }
+.halftone::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, var(--ht, var(--orange)) 1.6px, transparent 2px) 0 0 / 10px 10px;
+  mask-image: linear-gradient(120deg, transparent 20%, #000 95%);
+  opacity: 0.55;
+}
+.halftone-fade {
+  background: radial-gradient(circle, var(--yellow) 2.2px, transparent 2.6px) 0 0 / 12px 12px;
+  mask-image: radial-gradient(circle at 70% 40%, #000, transparent 65%);
+}
+/* dither strip (checker ramp) */
+.dither {
+  height: 28px;
+  background:
+    repeating-conic-gradient(var(--ink) 0 25%, transparent 0 50%) 0 0 / 4px 4px;
+  mask-image: linear-gradient(90deg, #000, transparent);
+}
+
+/* Op art */
+.op-rings {
+  border-radius: 50% !important;
+  background: repeating-radial-gradient(circle, var(--ink) 0 6px, var(--yellow) 6px 12px);
+  animation: op-pulse 6s ease-in-out infinite alternate;
+}
+.op-rings.alt { background: repeating-radial-gradient(circle, var(--ink) 0 5px, var(--orange) 5px 10px); animation-duration: 4.5s; }
+@keyframes op-pulse { from { transform: scale(1) rotate(0); } to { transform: scale(1.08) rotate(8deg); } }
+.op-stripes {
+  height: 40px; border-block: 3px solid var(--ink);
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 10px, var(--yellow) 10px 20px);
+  background-size: 200% 100%;
+  animation: op-slide 3s linear infinite;
+}
+.op-stripes.green { background-image: repeating-linear-gradient(45deg, var(--ink) 0 10px, var(--orange) 10px 20px); animation-direction: reverse; }
+@keyframes op-slide { to { background-position: 56.57px 0; } }
+.op-wave { background: repeating-linear-gradient(90deg, var(--ink) 0 3px, transparent 3px 9px); mask-image: radial-gradient(ellipse at center, #000 30%, transparent 70%); }
+
+/* Terminal */
+.term { border: 3px solid var(--ink); background: #050806; color: #c6d83a; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; box-shadow: 8px 8px 0 var(--orange); }
+.term-bar { display: flex; justify-content: space-between; padding: 6px 12px; background: var(--yellow); color: #050806; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; border-bottom: 3px solid var(--ink); }
+.term pre { margin: 0; padding: 16px; white-space: pre-wrap; }
+.caret { display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em; background: currentColor; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.ascii { font-family: var(--font-mono); font-size: 11px; line-height: 1.1; white-space: pre; color: var(--orange); overflow: hidden; }
+.scanlines::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,.25) 2px 3px); }

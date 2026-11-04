@@ -55,6 +55,12 @@ function useReveal() {
   }, []);
 }
 
+const ASCII = String.raw`
+  ___  ___  _     ___  ___  ___ _____ _   ___ _  __
+ / __|/ _ \| |   / _ \| _ \/ __|_   _/_\ / __| |/ /
+| (__| (_) | |__| (_) |   /\__ \ | |/ _ \ (__| ' <
+ \___|\___/|____|\___/|_|_\|___/ |_/_/ \_\___|_|\_\   // UOFA`;
+
 const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
 
 function Index() {
@@ -62,19 +68,20 @@ function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
     <div id="top">
-      <header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
+      <div className="zone-dark border-b-3 border-ink"><header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
         <Brand />
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Main">
           {c.nav.map((n) => (
             <a key={n.href} href={n.href} className="hidden px-3 py-2 text-[15px] font-medium hover:underline hover:underline-offset-4 sm:inline-block">{n.label}</a>
           ))}
-          <a href="#join" className="btn btn-solid !px-4 !py-2">Join</a>
+          <a href="#join" className="btn btn-outline !px-4 !py-2">Join</a>
         </nav>
-      </header>
+      </header></div>
 
       <main>
         {/* HERO */}
-        <section className="wrap pb-16 pt-8 md:pb-24 md:pt-14">
+        <section className="wrap halftone relative pb-16 pt-8 md:pb-24 md:pt-14">
+          <div aria-hidden="true" className="op-rings pointer-events-none absolute -right-24 top-24 -z-10 hidden h-80 w-80 opacity-25 lg:block" />
           <p className="mono mb-6 text-mute">{c.hero.kicker}</p>
           <h1 className="mb-12 md:mb-16">
             <span className="sr-only">{c.hero.srTitle}</span>
@@ -120,6 +127,7 @@ function Index() {
         </div>
 
         {/* ABOUT */}
+        <div className="zone-dark"><div aria-hidden="true" className="dither" />
         <section id="about" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
           <div>
             <Label>{c.about.label}</Label>
@@ -128,10 +136,19 @@ function Index() {
           <div className="prose-cs space-y-5 text-mute md:pt-9">
             {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
           </div>
-        </section>
+          <div className="term relative scanlines md:col-span-2">
+            <div className="term-bar"><span>uofa@colorstack:~</span><span>[_][□][x]</span></div>
+            <pre>{`> whoami
+  black_and_latinx_students --in computing --at uofa
+> ls ./chapter
+  community/  academics/  careers/  summit/
+> ./join --chapter uofa `}<span className="caret" /></pre>
+          </div>
+        </section></div>
+        <div className="op-stripes" aria-hidden="true" />
 
         {/* PROGRAMS */}
-        <section id="programs" className="wrap reveal pb-24 md:pb-32">
+        <section id="programs" className="wrap reveal halftone pt-20 md:pt-28 pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
           <h2 className="h2 mb-12">{c.programs.title}</h2>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
@@ -149,10 +166,11 @@ function Index() {
         </section>
 
         {/* SUMMIT */}
-        <section id="summit" className="slab bg-slab py-20 text-slab-fg md:py-24">
+        <section id="summit" className="slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
           <div className="wrap reveal">
             <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
-              <div>
+              <div className="relative isolate">
+                <div aria-hidden="true" className="op-rings alt pointer-events-none absolute -left-10 top-0 -z-10 h-56 w-56 opacity-30" />
                 <p className="font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
                 <p className="mono mt-4 opacity-80">{c.summit.caption}</p>
               </div>
@@ -196,7 +214,8 @@ function Index() {
         </section>
 
         {/* JOIN */}
-        <section id="join" className="wrap reveal pb-24 md:pb-32">
+        <div className="op-stripes green" aria-hidden="true" />
+        <div className="zone-dark"><section id="join" className="wrap reveal py-24 md:py-32">
           <div className="grid gap-10 md:grid-cols-2 md:gap-16">
             <div>
               <Label>{c.join.label}</Label>
@@ -238,11 +257,12 @@ function Index() {
               </Acc.Item>
             ))}
           </Acc.Root>
-        </section>
+        </section></div>
       </main>
 
       <div className="stack-bar" aria-hidden="true" />
-      <footer className="wrap grid gap-6 py-12">
+      <div className="zone-dark"><footer className="wrap grid gap-6 py-12">
+        <pre aria-hidden="true" className="ascii">{ASCII}</pre>
         <Brand />
         <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
           <Ext href={INSTAGRAM_URL} className="hover:text-cobalt hover:underline">Instagram</Ext>
@@ -252,7 +272,7 @@ function Index() {
         </nav>
         <p className="text-mute">{c.footer.line}</p>
         <p className="mono text-mute">{c.footer.copyright}</p>
-      </footer>
+      </footer></div>
     </div>
   );
 }
