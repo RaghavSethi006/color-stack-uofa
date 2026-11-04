@@ -64,7 +64,6 @@ const ASCII = String.raw`
 const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
 
 function Index() {
-  useReveal();
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
     <div id="top">
