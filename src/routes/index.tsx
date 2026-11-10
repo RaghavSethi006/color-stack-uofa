@@ -141,7 +141,8 @@ function Index() {
         <div className="op-stripes" aria-hidden="true" />
 
         {/* PROGRAMS — a distinct animated print texture for every layer */}
-        <section id="programs" className="programs-zone wrap reveal pt-20 md:pt-28 pb-24 md:pb-32">
+        <section id="programs" className="programs-zone reveal">
+          <div className="wrap relative z-10 pt-20 md:pt-28 pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
           <h2 className="h2 mb-12">{c.programs.title}</h2>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
