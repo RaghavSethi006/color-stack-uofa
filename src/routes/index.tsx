@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import * as Acc from "@radix-ui/react-accordion";
 import logo from "@/assets/colorstack-uofa-logo.png.asset.json";
 import { content as c } from "@/content";
@@ -46,22 +46,14 @@ function Brand() {
   );
 }
 
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.12 });
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
-
 const ASCII = String.raw`
   ___  ___  _     ___  ___  ___ _____ _   ___ _  __
- / __|/ _ \| |   / _ \| _ \/ __|_   _/_\ / __| |/ /
+  / __|/ _ \| |   / _ \| _ \/ __|_   _/_\ / __| |/ /
 | (__| (_) | |__| (_) |   /\__ \ | |/ _ \ (__| ' <
  \___|\___/|____|\___/|_|_\|___/ |_/_/ \_\___|_|\_\   // UOFA`;
 
 const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
+const programPatterns = ["dots", "grid", "stripes", "checker"];
 
 function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
@@ -78,9 +70,10 @@ function Index() {
       </header></div>
 
       <main>
-        {/* HERO */}
-        <section className="wrap halftone relative pb-16 pt-8 md:pb-24 md:pt-14">
-          <div aria-hidden="true" className="op-rings pointer-events-none absolute -right-24 top-24 -z-10 hidden h-80 w-80 opacity-25 lg:block" />
+        {/* HERO — comic halftone + op-art rings */}
+        <section className="hero-zone wrap relative pb-16 pt-8 md:pb-24 md:pt-14">
+          <div aria-hidden="true" className="op-rings hero-rings pointer-events-none absolute hidden lg:block" />
+          <div aria-hidden="true" className="hero-pixels pointer-events-none absolute" />
           <p className="mono mb-6 text-mute">{c.hero.kicker}</p>
           <h1 className="mb-12 md:mb-16">
             <span className="sr-only">{c.hero.srTitle}</span>
@@ -98,7 +91,7 @@ function Index() {
                 <a href="#programs" className="btn btn-outline">{c.hero.secondary}</a>
               </div>
             </div>
-            <div className="brut self-start">
+            <div className="brut chapter-card self-start">
               <div className="flex items-center justify-between border-b-3 border-ink bg-yellow px-4 py-3">
                 <span className="mono">{c.hero.cardLabel}</span>
                 <span className="flex gap-1">
@@ -125,34 +118,38 @@ function Index() {
           </div>
         </div>
 
-        {/* ABOUT */}
-        <div className="zone-dark"><div aria-hidden="true" className="dither" />
-        <section id="about" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
-          <div>
-            <Label>{c.about.label}</Label>
-            <h2 className="h2">{c.about.title}</h2>
-          </div>
-          <div className="prose-cs space-y-5 text-mute md:pt-9">
-            {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
-          </div>
-          <div className="term relative scanlines md:col-span-2">
-            <div className="term-bar"><span>uofa@colorstack:~</span><span>[_][□][x]</span></div>
-            <pre>{`> whoami
+        {/* ABOUT — terminal output + drifting ASCII columns */}
+        <div className="about-zone zone-dark"><div aria-hidden="true" className="dither" />
+          <pre aria-hidden="true" className="ascii-stream ascii-stream-left">{`01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++\n01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++`}</pre>
+          <pre aria-hidden="true" className="ascii-stream ascii-stream-right">{`> run community\n  [OK] loaded\n> build_future\n  0101010101\n> connect --all\n  [OK] online\n> run community\n  [OK] loaded`}</pre>
+          <section id="about" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
+            <div>
+              <Label>{c.about.label}</Label>
+              <h2 className="h2">{c.about.title}</h2>
+            </div>
+            <div className="prose-cs space-y-5 text-mute md:pt-9">
+              {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
+            </div>
+            <div className="term relative scanlines md:col-span-2">
+              <div className="term-bar"><span>uofa@colorstack:~</span><span>[_][□][x]</span></div>
+              <pre>{`> whoami
   black_and_latinx_students --in computing --at uofa
 > ls ./chapter
   community/  academics/  careers/  summit/
 > ./join --chapter uofa `}<span className="caret" /></pre>
-          </div>
-        </section></div>
+            </div>
+          </section>
+        </div>
         <div className="op-stripes" aria-hidden="true" />
 
-        {/* PROGRAMS */}
-        <section id="programs" className="wrap reveal halftone pt-20 md:pt-28 pb-24 md:pb-32">
+        {/* PROGRAMS — a distinct animated print texture for every layer */}
+        <section id="programs" className="programs-zone wrap reveal pt-20 md:pt-28 pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
           <h2 className="h2 mb-12">{c.programs.title}</h2>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-            {c.programs.items.map((p) => (
-              <article key={p.name} className="layer-card" style={{ ["--c" as string]: colorVar(p.color) }}>
+            {c.programs.items.map((p, i) => (
+              <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
+                <div aria-hidden="true" className={`pattern-canvas pattern-${programPatterns[i]}`}><span /></div>
                 <p className="mono mb-6 flex items-center gap-2">
                   <span className="h-3.5 w-3.5 shrink-0" style={{ background: colorVar(p.color) }} />
                   Layer / {p.name}
@@ -164,14 +161,17 @@ function Index() {
           </div>
         </section>
 
-        {/* SUMMIT */}
-        <section id="summit" className="slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
-          <div className="wrap reveal">
+        {/* SUMMIT — kinetic target + animated flight path */}
+        <section id="summit" className="summit-zone slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
+          <div aria-hidden="true" className="op-rings alt summit-rings pointer-events-none absolute" />
+          <div aria-hidden="true" className="kinetic-bars pointer-events-none absolute">
+            {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ["--i" as string]: i }} />)}
+          </div>
+          <div className="wrap reveal relative z-10">
             <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
               <div className="relative isolate">
-                <div aria-hidden="true" className="op-rings alt pointer-events-none absolute -left-10 top-0 -z-10 h-56 w-56 opacity-30" />
-                <p className="font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
-                <p className="mono mt-4 opacity-80">{c.summit.caption}</p>
+                <p className="summit-numeral font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
+                <p className="summit-caption mono mt-4">{c.summit.caption}</p>
               </div>
               <div className="md:pt-6">
                 <p className="mono mb-4 opacity-80">{c.summit.label}</p>
@@ -182,9 +182,9 @@ function Index() {
               </div>
             </div>
             <svg viewBox="0 0 1000 170" className="mt-14 w-full" role="img" aria-label={`Route from Edmonton (${c.summit.route.from}) to San Francisco (${c.summit.route.to}), ${c.summit.route.distance}`}>
-              <path d="M40 140 Q500 -40 960 140" fill="none" stroke="var(--slab-fg)" strokeWidth="1.5" strokeDasharray="6 8" />
-              <circle cx="40" cy="140" r="8" fill="var(--yellow)" />
-              <circle cx="960" cy="140" r="8" fill="var(--yellow)" />
+              <path className="route-path" d="M40 140 Q500 -40 960 140" fill="none" />
+              <circle className="route-node" cx="40" cy="140" r="9" fill="var(--yellow)" />
+              <circle className="route-node route-node-late" cx="960" cy="140" r="9" fill="var(--yellow)" />
               <g fill="var(--slab-fg)" fontFamily="DM Mono, monospace" fontSize="15" letterSpacing="1.5">
                 <text x="40" y="168" textAnchor="middle">{c.summit.route.from}</text>
                 <text x="960" y="168" textAnchor="middle">{c.summit.route.to}</text>
@@ -194,69 +194,77 @@ function Index() {
           </div>
         </section>
 
-        {/* LEADERSHIP */}
-        <section id="leadership" className="wrap reveal grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
-          <div>
-            <Label>{c.leadership.label}</Label>
-            <h2 className="h2 mb-5">{c.leadership.title}</h2>
-            <p className="mb-8 text-mute">{c.leadership.line}</p>
-            <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
-          </div>
-          <dl className="wire bg-background px-5 py-2">
-            {c.leadership.roles.map(([r, d]) => (
-              <div key={r} className="grid gap-1 border-b border-dashed py-4 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:gap-4">
-                <dt className="mono pt-[3px]">{r}</dt>
-                <dd className="text-mute">{d}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        {/* JOIN */}
-        <div className="op-stripes green" aria-hidden="true" />
-        <div className="zone-dark"><section id="join" className="wrap reveal py-24 md:py-32">
-          <div className="grid gap-10 md:grid-cols-2 md:gap-16">
+        {/* LEADERSHIP — technical graph paper + floating Y2K wireframe */}
+        <div className="leadership-zone">
+          <div aria-hidden="true" className="wireframe-slab pointer-events-none absolute"><span /></div>
+          <span aria-hidden="true" className="coordinate-tag mono pointer-events-none absolute">X:53.5232 / Y:-113.5263</span>
+          <section id="leadership" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
-              <Label>{c.join.label}</Label>
-              <h2 className="h2">{c.join.title}</h2>
+              <Label>{c.leadership.label}</Label>
+              <h2 className="h2 mb-5">{c.leadership.title}</h2>
+              <p className="mb-8 text-mute">{c.leadership.line}</p>
+              <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
             </div>
-            <ol className="brut px-5">
-              {c.join.steps.map((s, i) => (
-                <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-dashed py-6 last:border-b-0">
-                  <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "cobalt", "yellow"][i] ?? "ink") }}>{i + 1}</span>
-                  <div>
-                    <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
-                    {s.body && <p className="mb-4 text-mute">{s.body}</p>}
-                    {i === 0 && <Ext href={COLORSTACK_URL} className="btn btn-solid mt-1">{s.cta}</Ext>}
-                    {i === 1 && <div className="mt-2"><Ext href={SIGNUP_URL} className="btn btn-solid" button>{s.cta}</Ext></div>}
-                    {i === 2 && (
-                      <div className="flex flex-wrap gap-x-6 gap-y-2">
-                        <Ext href={SLACK_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Slack</Ext>
-                        <Ext href={INSTAGRAM_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Instagram</Ext>
-                      </div>
-                    )}
-                  </div>
-                </li>
+            <dl className="wire leadership-list bg-background px-5 py-2">
+              {c.leadership.roles.map(([r, d]) => (
+                <div key={r} className="grid gap-1 border-b border-dashed py-4 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                  <dt className="mono pt-[3px]">{r}</dt>
+                  <dd className="text-mute">{d}</dd>
+                </div>
               ))}
-            </ol>
-          </div>
+            </dl>
+          </section>
+        </div>
 
-          <Acc.Root type="single" collapsible className="wire mt-16 bg-background px-5 md:ml-[calc(50%+2rem)]">
-            {c.join.faqs.map((f) => (
-              <Acc.Item key={f.q} value={f.q} className="border-b border-dashed last:border-b-0">
-                <Acc.Header>
-                  <Acc.Trigger className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold hover:text-cobalt">
-                    {f.q}
-                    <span className="faq-plus font-mono text-2xl leading-none" aria-hidden="true">+</span>
-                  </Acc.Trigger>
-                </Acc.Header>
-                <Acc.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-                  <p className="prose-cs pb-5 text-mute">{f.a}</p>
-                </Acc.Content>
-              </Acc.Item>
-            ))}
-          </Acc.Root>
-        </section></div>
+        {/* JOIN — rotating pixel sun + halftone fade */}
+        <div className="op-stripes green" aria-hidden="true" />
+        <div className="join-zone zone-dark">
+          <div aria-hidden="true" className="pixel-sun pointer-events-none absolute" />
+          <pre aria-hidden="true" className="join-ascii pointer-events-none absolute">{`+ + + + +\n+ [INIT] +\n+ + + + +`}</pre>
+          <section id="join" className="wrap reveal relative z-10 py-24 md:py-32">
+            <div className="grid gap-10 md:grid-cols-2 md:gap-16">
+              <div>
+                <Label>{c.join.label}</Label>
+                <h2 className="h2">{c.join.title}</h2>
+              </div>
+              <ol className="brut join-steps px-5">
+                {c.join.steps.map((s, i) => (
+                  <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-dashed py-6 last:border-b-0">
+                    <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "yellow", "green"][i] ?? "ink") }}>{i + 1}</span>
+                    <div>
+                      <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
+                      {s.body && <p className="mb-4 text-mute">{s.body}</p>}
+                      {i === 0 && <Ext href={COLORSTACK_URL} className="btn btn-solid mt-1">{s.cta}</Ext>}
+                      {i === 1 && <div className="mt-2"><Ext href={SIGNUP_URL} className="btn btn-solid" button>{s.cta}</Ext></div>}
+                      {i === 2 && (
+                        <div className="flex flex-wrap gap-x-6 gap-y-2">
+                          <Ext href={SLACK_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Slack</Ext>
+                          <Ext href={INSTAGRAM_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Instagram</Ext>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <Acc.Root type="single" collapsible className="wire mt-16 bg-background px-5 md:ml-[calc(50%+2rem)]">
+              {c.join.faqs.map((f) => (
+                <Acc.Item key={f.q} value={f.q} className="border-b border-dashed last:border-b-0">
+                  <Acc.Header>
+                    <Acc.Trigger className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold hover:text-cobalt">
+                      {f.q}
+                      <span className="faq-plus font-mono text-2xl leading-none" aria-hidden="true">+</span>
+                    </Acc.Trigger>
+                  </Acc.Header>
+                  <Acc.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                    <p className="prose-cs pb-5 text-mute">{f.a}</p>
+                  </Acc.Content>
+                </Acc.Item>
+              ))}
+            </Acc.Root>
+          </section>
+        </div>
       </main>
 
       <div className="stack-bar" aria-hidden="true" />
