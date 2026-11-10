@@ -107,6 +107,7 @@ function Index() {
               </dl>
             </div>
           </div>
+          </div>
         </section>
 
         <div className="marquee" aria-hidden="true">
