@@ -120,8 +120,6 @@ function Index() {
 
         {/* ABOUT — terminal output + drifting ASCII columns */}
         <div className="about-zone zone-dark"><div aria-hidden="true" className="dither" />
-          <pre aria-hidden="true" className="ascii-stream ascii-stream-left">{`01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++\n01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++`}</pre>
-          <pre aria-hidden="true" className="ascii-stream ascii-stream-right">{`> run community\n  [OK] loaded\n> build_future\n  0101010101\n> connect --all\n  [OK] online\n> run community\n  [OK] loaded`}</pre>
           <section id="about" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
               <Label>{c.about.label}</Label>
