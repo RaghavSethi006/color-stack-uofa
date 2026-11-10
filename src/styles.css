@@ -416,7 +416,7 @@
   .kinetic-bars { right: 12px; bottom: 18px; height: 80px; opacity: 0.35; }
   .kinetic-bars > span { width: 6px; }
   .wireframe-slab, .coordinate-tag { display: none; }
-  .leadership-zone::before { inset-left: 20%; }
+  .leadership-zone::before { left: 20%; }
   .pixel-sun { width: 380px; height: 380px; left: -180px; top: -100px; opacity: 0.4; }
   .join-ascii { display: none; }
 }
