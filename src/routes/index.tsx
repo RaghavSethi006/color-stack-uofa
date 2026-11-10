@@ -34,7 +34,7 @@ function Ext({ href, children, className = "", button }: { href: string; childre
 }
 
 function Label({ children }: { children: ReactNode }) {
-  return <p className="mono mb-4 text-mute">{children}</p>;
+  return <p className="comic-label mono mb-6">{children}</p>;
 }
 
 function Brand() {
@@ -53,7 +53,21 @@ const ASCII = String.raw`
  \___|\___/|____|\___/|_|_\|___/ |_/_/ \_\___|_|\_\   // UOFA`;
 
 const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
-const programPatterns = ["dots", "grid", "stripes", "checker"];
+const programPatterns = ["triangles", "blocks", "chevrons", "pluses"];
+
+function ProgramPattern({ type }: { type: string }) {
+  return (
+    <div aria-hidden="true" className={`pattern-canvas shape-pattern shape-${type}`}>
+      <div className="shape-track">
+        {[0, 1].map((group) => (
+          <div className="shape-set" key={group}>
+            {Array.from({ length: 6 }, (_, i) => <span key={i} />)}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
@@ -125,7 +139,7 @@ function Index() {
               <Label>{c.about.label}</Label>
               <h2 className="h2">{c.about.title}</h2>
             </div>
-            <div className="prose-cs space-y-5 text-mute md:pt-9">
+            <div className="about-copy prose-cs space-y-5 text-mute md:mt-9">
               {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
             </div>
             <div className="term relative scanlines md:col-span-2">
@@ -138,7 +152,7 @@ function Index() {
             </div>
           </section>
         </div>
-        <div className="op-stripes" aria-hidden="true" />
+        <div className="zigzag-divider" aria-hidden="true" />
 
         {/* PROGRAMS — a distinct animated print texture for every layer */}
         <section id="programs" className="programs-zone reveal">
@@ -148,7 +162,7 @@ function Index() {
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {c.programs.items.map((p, i) => (
               <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
-                <div aria-hidden="true" className={`pattern-canvas pattern-${programPatterns[i]}`}><span /></div>
+                <ProgramPattern type={programPatterns[i]} />
                 <p className="mono mb-6 flex items-center gap-2">
                   <span className="h-3.5 w-3.5 shrink-0" style={{ background: colorVar(p.color) }} />
                   Layer / {p.name}
@@ -182,8 +196,8 @@ function Index() {
             </div>
             <svg viewBox="0 0 1000 170" className="mt-14 w-full" role="img" aria-label={`Route from Edmonton (${c.summit.route.from}) to San Francisco (${c.summit.route.to}), ${c.summit.route.distance}`}>
               <path className="route-path" d="M40 140 Q500 -40 960 140" fill="none" />
-              <circle className="route-node" cx="40" cy="140" r="9" fill="var(--yellow)" />
-              <circle className="route-node route-node-late" cx="960" cy="140" r="9" fill="var(--yellow)" />
+              <polygon className="route-node" points="40,127 53,140 40,153 27,140" fill="var(--yellow)" />
+              <polygon className="route-node route-node-late" points="960,127 973,140 960,153 947,140" fill="var(--yellow)" />
               <g fill="var(--slab-fg)" fontFamily="DM Mono, monospace" fontSize="15" letterSpacing="1.5">
                 <text x="40" y="168" textAnchor="middle">{c.summit.route.from}</text>
                 <text x="960" y="168" textAnchor="middle">{c.summit.route.to}</text>
@@ -195,8 +209,7 @@ function Index() {
 
         {/* LEADERSHIP — technical graph paper + floating Y2K wireframe */}
         <div className="leadership-zone">
-          <div aria-hidden="true" className="wireframe-slab pointer-events-none absolute"><span /></div>
-          <span aria-hidden="true" className="coordinate-tag mono pointer-events-none absolute">X:53.5232 / Y:-113.5263</span>
+          <div aria-hidden="true" className="stack-schematic pointer-events-none absolute"><span /><span /><span /></div>
           <section id="leadership" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
               <Label>{c.leadership.label}</Label>
@@ -216,7 +229,7 @@ function Index() {
         </div>
 
         {/* JOIN — rotating pixel sun + halftone fade */}
-        <div className="op-stripes green" aria-hidden="true" />
+        <div className="zigzag-divider zigzag-dark" aria-hidden="true" />
         <div className="join-zone zone-dark">
           <section id="join" className="wrap reveal relative z-10 py-24 md:py-32">
             <div className="grid gap-10 md:grid-cols-2 md:gap-16">

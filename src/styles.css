@@ -480,3 +480,140 @@
   .summit-zone svg { padding: 6px; }
 }
 
+/* Angular comic system: cut panels, caption tabs and full-width print dividers. */
+.comic-label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 32px;
+  padding: 5px 26px 5px 11px;
+  border: 2px solid var(--ink);
+  background: var(--yellow);
+  color: var(--slab);
+  font-weight: 600;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+  filter: drop-shadow(4px 4px 0 var(--orange));
+}
+.zone-dark .comic-label { border-color: var(--yellow); }
+
+.btn {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  box-shadow: none;
+  filter: drop-shadow(4px 4px 0 var(--ink));
+  transition: transform 0.15s ease, filter 0.25s cubic-bezier(0.2,0.8,0.2,1), background 0.25s ease;
+}
+.btn:hover { box-shadow: none; filter: drop-shadow(7px 7px 0 var(--orange)); }
+.btn:active { box-shadow: none; filter: none; }
+.zone-dark .btn-solid { box-shadow: none; }
+
+.hero-kicker {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  box-shadow: none;
+  filter: drop-shadow(4px 4px 0 var(--yellow));
+}
+.hero-copy, .chapter-card, .about-copy, .layer-card, .term,
+.summit-copy, .summit-numeral, .leadership-list, .join-steps, .join-zone .wire {
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+.hero-copy { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--orange)); }
+.chapter-card { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--ink)); }
+.about-copy {
+  padding: 24px;
+  border: 3px solid var(--yellow);
+  background: var(--slab);
+  filter: drop-shadow(8px 8px 0 var(--cobalt));
+}
+.term { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--orange)); }
+.layer-card { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--ink)); }
+.layer-card:hover { box-shadow: none; filter: drop-shadow(13px 13px 0 var(--c)); }
+.summit-copy { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--cobalt)); }
+.summit-numeral { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--cobalt)); }
+.leadership-list { box-shadow: none; filter: drop-shadow(8px 8px 0 var(--yellow)); }
+.join-steps { box-shadow: none; filter: drop-shadow(9px 9px 0 var(--orange)); }
+.join-zone .wire { filter: drop-shadow(7px 7px 0 var(--cobalt)); }
+.leadership-list::before, .leadership-list::after,
+.join-zone .wire::before, .join-zone .wire::after { content: none; }
+
+.zigzag-divider {
+  height: 28px;
+  border-block: 3px solid var(--ink);
+  background-color: var(--yellow);
+  background-image:
+    linear-gradient(135deg, var(--ink) 25%, transparent 25%),
+    linear-gradient(225deg, var(--ink) 25%, transparent 25%);
+  background-position: 0 0;
+  background-size: 28px 28px;
+}
+.zigzag-dark { background-color: var(--orange); }
+
+/* Each program gets a meaningful shape: connect, build, advance, include. */
+.shape-pattern { height: 112px; background: var(--bg-2); }
+.shape-track { display: flex; align-items: center; width: max-content; height: 100%; animation: shape-feed 16s linear infinite; }
+.shape-set { display: flex; align-items: center; gap: 24px; padding-right: 24px; }
+.shape-set > span {
+  display: block;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  background: var(--c);
+  filter: drop-shadow(4px 4px 0 var(--ink));
+}
+.layer-card:hover .shape-track { animation-play-state: paused; }
+.shape-triangles .shape-set > span { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.shape-triangles .shape-set > span:nth-child(even) { transform: rotate(180deg); background: var(--cobalt); }
+.shape-blocks .shape-track { animation-duration: 21s; animation-direction: reverse; }
+.shape-blocks .shape-set > span {
+  height: 46px;
+  clip-path: polygon(22% 0, 100% 0, 78% 100%, 0 100%);
+  background: repeating-linear-gradient(0deg, var(--c) 0 10px, var(--ink) 10px 13px);
+}
+.shape-chevrons .shape-track { animation-duration: 10s; }
+.shape-chevrons .shape-set > span {
+  flex-basis: 62px;
+  width: 62px;
+  clip-path: polygon(0 0, 52% 0, 100% 50%, 52% 100%, 0 100%, 48% 50%);
+}
+.shape-chevrons .shape-set > span:nth-child(even) { background: var(--ink); }
+.shape-pluses .shape-track { animation-duration: 18s; animation-direction: reverse; }
+.shape-pluses .shape-set > span {
+  clip-path: polygon(34% 0, 66% 0, 66% 34%, 100% 34%, 100% 66%, 66% 66%, 66% 100%, 34% 100%, 34% 66%, 0 66%, 0 34%, 34% 34%);
+}
+.shape-pluses .shape-set > span:nth-child(3n) { background: var(--yellow); }
+@keyframes shape-feed { to { transform: translateX(-50%); } }
+
+/* A triangular technical field replaces the generic leadership grid. */
+.leadership-zone {
+  background-color: var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 55px, color-mix(in srgb, var(--cobalt) 13%, transparent) 55px 56px),
+    repeating-linear-gradient(60deg, transparent 0 55px, color-mix(in srgb, var(--cobalt) 13%, transparent) 55px 56px),
+    repeating-linear-gradient(-60deg, transparent 0 55px, color-mix(in srgb, var(--cobalt) 13%, transparent) 55px 56px);
+}
+.leadership-zone::before, .leadership-zone::after { content: none; }
+.stack-schematic { right: 7%; top: 6%; width: 230px; height: 190px; opacity: 0.65; animation: stack-hover 6s ease-in-out infinite alternate; }
+.stack-schematic > span {
+  position: absolute;
+  left: 0;
+  width: 210px;
+  height: 68px;
+  border: 3px solid var(--cobalt);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  clip-path: polygon(18% 0, 100% 0, 82% 100%, 0 100%);
+}
+.stack-schematic > span:nth-child(1) { top: 0; left: 20px; }
+.stack-schematic > span:nth-child(2) { top: 48px; left: 10px; border-style: dashed; }
+.stack-schematic > span:nth-child(3) { top: 96px; background: var(--yellow); border-color: var(--ink); }
+@keyframes stack-hover { to { transform: translate(-12px, 12px) skewX(-4deg); } }
+
+@media (max-width: 767px) {
+  .about-copy { padding: 18px; }
+  .hero-copy, .chapter-card, .about-copy, .layer-card, .term,
+  .summit-copy, .summit-numeral, .leadership-list, .join-steps, .join-zone .wire {
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  }
+  .shape-set { gap: 18px; padding-right: 18px; }
+  .shape-set > span { flex-basis: 46px; width: 46px; height: 46px; }
+  .shape-chevrons .shape-set > span { flex-basis: 52px; width: 52px; }
+  .stack-schematic { display: none; }
+}
+
