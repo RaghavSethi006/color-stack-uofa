@@ -162,7 +162,7 @@ function Index() {
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {c.programs.items.map((p, i) => (
               <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
-                <ProgramPattern type={programPatterns[i]} />
+                <ProgramPattern type={programPatterns[i] ?? "triangles"} />
                 <p className="mono mb-6 flex items-center gap-2">
                   <span className="h-3.5 w-3.5 shrink-0" style={{ background: colorVar(p.color) }} />
                   Layer / {p.name}
