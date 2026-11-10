@@ -83,7 +83,7 @@ function Index() {
             </span>
           </h1>
           <div className="grid gap-12 min-[860px]:grid-cols-[1.25fr_1fr] min-[860px]:gap-16">
-            <div>
+            <div className="hero-copy self-start">
               <p className="max-w-[30ch] text-[22px] font-medium leading-[1.35] md:text-[28px]">{c.hero.lead}</p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a href="#join" className="btn btn-solid">{c.hero.primary}</a>
