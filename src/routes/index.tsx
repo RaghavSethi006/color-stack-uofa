@@ -71,10 +71,9 @@ function Index() {
 
       <main>
         {/* HERO — comic halftone + op-art rings */}
-        <section className="hero-zone wrap relative pb-16 pt-8 md:pb-24 md:pt-14">
-          <div aria-hidden="true" className="op-rings hero-rings pointer-events-none absolute hidden lg:block" />
-          <div aria-hidden="true" className="hero-pixels pointer-events-none absolute" />
-          <p className="mono mb-6 text-mute">{c.hero.kicker}</p>
+        <section className="hero-zone relative">
+          <div className="wrap relative z-10 pb-16 pt-8 md:pb-24 md:pt-14">
+          <p className="hero-kicker mono mb-6 text-mute">{c.hero.kicker}</p>
           <h1 className="mb-12 md:mb-16">
             <span className="sr-only">{c.hero.srTitle}</span>
             <span className="wordmark" aria-hidden="true">
@@ -84,7 +83,7 @@ function Index() {
             </span>
           </h1>
           <div className="grid gap-12 min-[860px]:grid-cols-[1.25fr_1fr] min-[860px]:gap-16">
-            <div>
+            <div className="hero-copy self-start">
               <p className="max-w-[30ch] text-[22px] font-medium leading-[1.35] md:text-[28px]">{c.hero.lead}</p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <a href="#join" className="btn btn-solid">{c.hero.primary}</a>
@@ -108,6 +107,7 @@ function Index() {
               </dl>
             </div>
           </div>
+          </div>
         </section>
 
         <div className="marquee" aria-hidden="true">
@@ -120,8 +120,6 @@ function Index() {
 
         {/* ABOUT — terminal output + drifting ASCII columns */}
         <div className="about-zone zone-dark"><div aria-hidden="true" className="dither" />
-          <pre aria-hidden="true" className="ascii-stream ascii-stream-left">{`01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++\n01  +  []  >_\n10  //  {}  01\n++  01  <<  >>\n[]  >_  10  ++`}</pre>
-          <pre aria-hidden="true" className="ascii-stream ascii-stream-right">{`> run community\n  [OK] loaded\n> build_future\n  0101010101\n> connect --all\n  [OK] online\n> run community\n  [OK] loaded`}</pre>
           <section id="about" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
               <Label>{c.about.label}</Label>
@@ -143,7 +141,8 @@ function Index() {
         <div className="op-stripes" aria-hidden="true" />
 
         {/* PROGRAMS — a distinct animated print texture for every layer */}
-        <section id="programs" className="programs-zone wrap reveal pt-20 md:pt-28 pb-24 md:pb-32">
+        <section id="programs" className="programs-zone reveal">
+          <div className="wrap relative z-10 pt-20 md:pt-28 pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
           <h2 className="h2 mb-12">{c.programs.title}</h2>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
@@ -159,11 +158,11 @@ function Index() {
               </article>
             ))}
           </div>
+          </div>
         </section>
 
-        {/* SUMMIT — kinetic target + animated flight path */}
+        {/* SUMMIT — kinetic chevrons + animated flight path */}
         <section id="summit" className="summit-zone slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
-          <div aria-hidden="true" className="op-rings alt summit-rings pointer-events-none absolute" />
           <div aria-hidden="true" className="kinetic-bars pointer-events-none absolute">
             {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ["--i" as string]: i }} />)}
           </div>
@@ -173,7 +172,7 @@ function Index() {
                 <p className="summit-numeral font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
                 <p className="summit-caption mono mt-4">{c.summit.caption}</p>
               </div>
-              <div className="md:pt-6">
+              <div className="summit-copy md:mt-6">
                 <p className="mono mb-4 opacity-80">{c.summit.label}</p>
                 <h2 className="h2 mb-6">{c.summit.title}</h2>
                 <p className="prose-cs opacity-85">{c.summit.body}</p>
@@ -219,8 +218,6 @@ function Index() {
         {/* JOIN — rotating pixel sun + halftone fade */}
         <div className="op-stripes green" aria-hidden="true" />
         <div className="join-zone zone-dark">
-          <div aria-hidden="true" className="pixel-sun pointer-events-none absolute" />
-          <pre aria-hidden="true" className="join-ascii pointer-events-none absolute">{`+ + + + +\n+ [INIT] +\n+ + + + +`}</pre>
           <section id="join" className="wrap reveal relative z-10 py-24 md:py-32">
             <div className="grid gap-10 md:grid-cols-2 md:gap-16">
               <div>
