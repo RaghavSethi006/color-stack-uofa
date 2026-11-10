@@ -422,3 +422,61 @@
   .join-ascii { display: none; }
 }
 
+/* Full-field patterns: every section owns one bold, uniform texture. */
+.hero-zone {
+  isolation: isolate; overflow: hidden;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--cobalt) 46%, transparent) 0 2.8px, transparent 3.2px),
+    radial-gradient(circle, color-mix(in srgb, var(--orange) 42%, transparent) 0 2px, transparent 2.5px);
+  background-position: 0 0, 12px 12px;
+  background-size: 24px 24px;
+}
+.hero-zone::before, .hero-zone::after, .programs-zone::before, .summit-zone::before, .join-zone::after { content: none; }
+.hero-kicker { display: inline-block; padding: 6px 9px; border: 2px solid var(--ink); background: var(--bg); box-shadow: 4px 4px 0 var(--yellow); }
+.hero-copy { padding: 24px; border: 3px solid var(--ink); background: var(--bg); box-shadow: 8px 8px 0 var(--orange); }
+
+.about-zone {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(198, 216, 58, 0.055) 5px 6px),
+    linear-gradient(color-mix(in srgb, var(--yellow) 19%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--yellow) 19%, transparent) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+.programs-zone {
+  background-color: var(--bg-2);
+  background-image: repeating-conic-gradient(color-mix(in srgb, var(--yellow) 48%, transparent) 0 25%, transparent 0 50%);
+  background-size: 32px 32px;
+}
+
+.summit-zone {
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 42px, color-mix(in srgb, var(--orange) 38%, transparent) 42px 48px),
+    repeating-linear-gradient(-45deg, transparent 0 42px, color-mix(in srgb, var(--yellow) 20%, transparent) 42px 48px);
+  animation: summit-field 16s linear infinite;
+}
+.summit-copy { padding: 24px; border: 3px solid var(--yellow); background: var(--slab); box-shadow: 8px 8px 0 var(--cobalt); }
+.summit-numeral { display: inline-block; padding: 0 24px 20px; border: 3px solid var(--yellow); background: var(--slab); box-shadow: 8px 8px 0 var(--cobalt); }
+.summit-zone svg { padding: 14px; border: 3px solid var(--yellow); background: var(--slab); }
+@keyframes summit-field { to { background-position: 168px 84px, -168px 84px; } }
+
+.leadership-zone::before {
+  inset: 0; opacity: 0.3; mask-image: none;
+  background-size: 28px 28px;
+}
+.leadership-zone::after { content: none; }
+
+.join-zone {
+  background-image:
+    linear-gradient(45deg, transparent 45%, color-mix(in srgb, var(--orange) 34%, transparent) 45% 55%, transparent 55%),
+    linear-gradient(-45deg, transparent 45%, color-mix(in srgb, var(--yellow) 22%, transparent) 45% 55%, transparent 55%);
+  background-size: 36px 36px;
+}
+
+@media (max-width: 767px) {
+  .hero-copy, .summit-copy { padding: 18px; }
+  .summit-numeral { padding-inline: 18px; }
+  .summit-zone svg { padding: 6px; }
+}
+
