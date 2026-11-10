@@ -171,7 +171,7 @@ function Index() {
             <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
               <div className="relative isolate">
                 <p className="summit-numeral font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
-                <p className="mono mt-4 opacity-80">{c.summit.caption}</p>
+                <p className="summit-caption mono mt-4">{c.summit.caption}</p>
               </div>
               <div className="md:pt-6">
                 <p className="mono mb-4 opacity-80">{c.summit.label}</p>

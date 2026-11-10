@@ -300,7 +300,7 @@
 .about-zone .term { box-shadow: 10px 10px 0 var(--orange); }
 @keyframes ascii-drift { to { translate: 0 -44px; } }
 
-.programs-zone { position: relative; isolation: isolate; }
+.programs-zone { position: relative; isolation: isolate; overflow: clip; }
 .programs-zone::before {
   content: ""; position: absolute; z-index: -1; top: 24px; right: -70px; width: 300px; height: 220px;
   background: radial-gradient(circle, var(--yellow) 0 4px, transparent 4.5px) 0 0 / 17px 17px;
