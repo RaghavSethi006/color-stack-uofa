@@ -218,8 +218,6 @@ function Index() {
         {/* JOIN — rotating pixel sun + halftone fade */}
         <div className="op-stripes green" aria-hidden="true" />
         <div className="join-zone zone-dark">
-          <div aria-hidden="true" className="pixel-sun pointer-events-none absolute" />
-          <pre aria-hidden="true" className="join-ascii pointer-events-none absolute">{`+ + + + +\n+ [INIT] +\n+ + + + +`}</pre>
           <section id="join" className="wrap reveal relative z-10 py-24 md:py-32">
             <div className="grid gap-10 md:grid-cols-2 md:gap-16">
               <div>
