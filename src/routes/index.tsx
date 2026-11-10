@@ -158,9 +158,10 @@ function Index() {
               </article>
             ))}
           </div>
+          </div>
         </section>
 
-        {/* SUMMIT — kinetic target + animated flight path */}
+        {/* SUMMIT — kinetic chevrons + animated flight path */}
         <section id="summit" className="summit-zone slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
           <div aria-hidden="true" className="op-rings alt summit-rings pointer-events-none absolute" />
           <div aria-hidden="true" className="kinetic-bars pointer-events-none absolute">
