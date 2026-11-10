@@ -71,10 +71,9 @@ function Index() {
 
       <main>
         {/* HERO — comic halftone + op-art rings */}
-        <section className="hero-zone wrap relative pb-16 pt-8 md:pb-24 md:pt-14">
-          <div aria-hidden="true" className="op-rings hero-rings pointer-events-none absolute hidden lg:block" />
-          <div aria-hidden="true" className="hero-pixels pointer-events-none absolute" />
-          <p className="mono mb-6 text-mute">{c.hero.kicker}</p>
+        <section className="hero-zone relative">
+          <div className="wrap relative z-10 pb-16 pt-8 md:pb-24 md:pt-14">
+          <p className="hero-kicker mono mb-6 text-mute">{c.hero.kicker}</p>
           <h1 className="mb-12 md:mb-16">
             <span className="sr-only">{c.hero.srTitle}</span>
             <span className="wordmark" aria-hidden="true">
