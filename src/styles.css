@@ -355,6 +355,10 @@
   animation-delay: calc(var(--i) * -0.14s);
 }
 .kinetic-bars > span:nth-child(3n) { background: var(--orange); }
+.kinetic-bars > span:nth-child(5n + 1) { height: 42px; }
+.kinetic-bars > span:nth-child(5n + 2) { height: 112px; }
+.kinetic-bars > span:nth-child(5n + 3) { height: 68px; }
+.kinetic-bars > span:nth-child(5n + 4) { height: 94px; }
 .route-path { stroke: var(--yellow); stroke-width: 3; stroke-dasharray: 12 10; animation: route-flow 1.1s linear infinite; }
 .route-node { transform-box: fill-box; transform-origin: center; animation: node-pulse 1.8s ease-out infinite; }
 .route-node-late { animation-delay: -0.9s; }
