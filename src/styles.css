@@ -668,3 +668,83 @@
 .zone-dark .reg-mark::before, .zone-dark .reg-mark::after { background: var(--yellow); }
 .zone-dark .reg-mark > i { border-color: var(--yellow); }
 @media (max-width: 767px) { .burst { width: 96px; height: 96px; font-size: 12px; padding: 16px; } .reg-mark { display: none; } }
+
+/* ===== Phase 1: motion tokens ===== */
+:root {
+  --dur-1: 120ms; --dur-2: 240ms; --dur-3: 480ms;
+  --ease-snap: cubic-bezier(.2, 1.4, .4, 1);   /* slight overshoot */
+  --ease-mech: cubic-bezier(.7, 0, .3, 1);      /* hard in-out */
+  --header-h: 72px;
+}
+html { scroll-padding-top: calc(var(--header-h) + 12px); }
+@utility stagger { transition-delay: calc(var(--i, 0) * 60ms); animation-delay: calc(var(--i, 0) * 60ms); }
+@supports (animation-timeline: view()) {
+  .reveal { animation-timing-function: var(--ease-snap); }
+}
+.btn { min-height: 44px; transition: transform var(--dur-1) var(--ease-mech), box-shadow var(--dur-1) var(--ease-mech), background var(--dur-2) ease; }
+.layer-card:focus-within { transform: translate(-5px,-5px); box-shadow: 13px 13px 0 var(--c); }
+
+/* Brutalist focus rings */
+:focus-visible { outline: 3px solid var(--orange) !important; outline-offset: 4px; box-shadow: 0 0 0 7px var(--yellow); }
+.zone-dark :focus-visible { outline-color: var(--yellow) !important; box-shadow: 0 0 0 7px var(--orange); }
+
+.skip-link {
+  position: fixed; left: 12px; top: 12px; z-index: 100; padding: 12px 16px;
+  background: var(--yellow); color: var(--slab); border: 3px solid var(--slab); box-shadow: 4px 4px 0 var(--slab);
+  transform: translateY(-200%); transition: transform var(--dur-2) var(--ease-snap);
+}
+.skip-link:focus { transform: none; }
+
+/* Stack-building progress bar */
+.stack-progress { position: fixed; inset: 0 0 auto 0; z-index: 60; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; height: 7px; background: var(--slab); }
+.stack-progress-seg { position: relative; display: block; background: color-mix(in srgb, var(--c) 22%, var(--slab)); }
+.stack-progress-seg > span { position: absolute; inset: 0; background: var(--c); transform-origin: left; transition: transform var(--dur-1) linear; }
+.stack-progress-seg::after { content: ""; position: absolute; inset: -8px 0 -14px; } /* bigger hit area */
+
+/* Sticky compact header */
+.site-header { position: sticky; top: 0; z-index: 50; border-bottom: 3px solid var(--ink); padding-top: 7px; }
+.site-header > header { padding-block: 16px; transition: padding var(--dur-2) var(--ease-mech); }
+.site-header.is-compact { box-shadow: 0 6px 0 var(--orange); }
+.site-header.is-compact > header { padding-block: 6px; }
+.nav-link { position: relative; min-height: 44px; align-items: center; padding: 0 12px; font-size: 15px; font-weight: 500; }
+.nav-link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 8px; height: 4px; background: var(--c); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-2) var(--ease-snap); }
+.nav-link:hover::after, .nav-link[aria-current]::after { transform: scaleX(1); }
+.menu-btn { min-height: 44px; min-width: 44px; padding: 0 12px; border: 3px solid var(--yellow); background: var(--slab); color: var(--yellow); box-shadow: 4px 4px 0 var(--orange); }
+.menu-btn:active { transform: translate(4px,4px); box-shadow: none; }
+
+/* Terminal drawer */
+.drawer-overlay { position: fixed; inset: 0; z-index: 70; background: color-mix(in srgb, var(--slab) 70%, transparent); animation: fade-in var(--dur-2) ease both; }
+.drawer { position: fixed; inset: 0; z-index: 71; overflow-y: auto; background: var(--slab); color: var(--slab-fg); border: 3px solid var(--yellow); animation: drawer-in var(--dur-3) var(--ease-snap) both; }
+.drawer-close { min-height: 44px; min-width: 44px; color: var(--yellow); }
+.drawer-item a { display: flex; align-items: baseline; gap: 16px; min-height: 64px; padding: 12px 0; border-bottom: 2px dashed color-mix(in srgb, var(--slab-fg) 25%, transparent);
+  font-family: var(--font-display); font-variation-settings: "wdth" 70, "wght" 850; font-size: clamp(2.2rem, 11vw, 3.4rem); line-height: 1; text-transform: uppercase; }
+.drawer-item { animation: drawer-item-in var(--dur-2) var(--ease-snap) both; animation-delay: calc(120ms + var(--i) * 50ms); }
+.drawer-item a[aria-current] { color: var(--c); }
+.drawer-idx { font-size: 14px; color: var(--c); }
+@keyframes drawer-in { from { transform: translateY(-24px); opacity: 0; } }
+@keyframes drawer-item-in { from { transform: translateX(-24px); opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+
+/* Section heading copy-link */
+.h2-wrap { position: relative; display: flex; align-items: flex-start; gap: 12px; }
+.copy-link { flex: none; display: grid; place-items: center; width: 44px; height: 44px; margin-top: 4px; border: 3px solid currentColor; background: var(--yellow); color: var(--slab);
+  opacity: 0; transform: translateY(6px); transition: opacity var(--dur-2) ease, transform var(--dur-2) var(--ease-snap); }
+.h2-wrap:hover .copy-link, .copy-link:focus-visible { opacity: 1; transform: none; }
+@media (hover: none) { .copy-link { opacity: 1; transform: none; } }
+
+/* Toasts */
+.brut-toast { display: flex; align-items: center; gap: 12px; padding: 14px 18px; min-width: 260px; background: var(--yellow); color: var(--slab);
+  border: 3px solid var(--slab); box-shadow: 6px 6px 0 var(--slab); font-size: 14px; }
+
+/* Mobile sticky Join bar */
+.join-bar { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 45; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 8px 8px 14px; background: var(--slab); color: var(--slab-fg); border: 3px solid var(--yellow); box-shadow: 5px 5px 0 var(--orange); font-size: 12px;
+  transform: translateY(160%); transition: transform var(--dur-3) var(--ease-snap); }
+.join-bar.is-on { transform: none; }
+.join-bar .btn { background: var(--yellow); color: var(--slab); }
+
+@media (max-width: 767px) { .marquee > div { animation-duration: 44s; } }
+.marquee:focus-within > div { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .stack-progress-seg > span, .join-bar, .skip-link { transition: none !important; }
+}

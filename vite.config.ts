@@ -14,6 +14,6 @@ export default defineConfig({
   },
   vite: {
     // Pre-bundle Radix with React in the first pass so a late re-optimization can't load a second React copy.
-    optimizeDeps: { include: ["@radix-ui/react-accordion", "lucide-react"] },
+    optimizeDeps: { include: ["@radix-ui/react-accordion", "@radix-ui/react-dialog", "sonner", "lucide-react"] },
   },
 });

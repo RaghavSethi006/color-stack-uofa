@@ -3,7 +3,9 @@ import type { ReactNode } from "react";
 import * as Acc from "@radix-ui/react-accordion";
 import logo from "@/assets/colorstack-uofa-logo.png.asset.json";
 import { content as c } from "@/content";
-import { COLORSTACK_URL, EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SIGNUP_URL, SLACK_URL } from "@/config";
+import { SiteChrome, SkipLink, SectionHead } from "@/components/site/SiteChrome";
+import { BrutToaster } from "@/components/site/BrutToaster";
+import { COLORSTACK_URL, EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SIGNUP_URL, SLACK_URL } from "@/config/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,9 +35,6 @@ function Ext({ href, children, className = "", button }: { href: string; childre
   );
 }
 
-function Label({ children }: { children: ReactNode }) {
-  return <p className="comic-label mono mb-6">{children}</p>;
-}
 
 function Brand() {
   return (
@@ -80,17 +79,10 @@ function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
     <div id="top">
-      <div className="zone-dark border-b-3 border-ink"><header className="wrap grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-5">
-        <Brand />
-        <nav className="flex items-center gap-1 sm:gap-2" aria-label="Main">
-          {c.nav.map((n) => (
-            <a key={n.href} href={n.href} className="hidden px-3 py-2 text-[15px] font-medium hover:underline hover:underline-offset-4 sm:inline-block">{n.label}</a>
-          ))}
-          <a href="#join" className="btn btn-outline !px-4 !py-2">Join</a>
-        </nav>
-      </header></div>
+      <SkipLink />
+      <SiteChrome />
 
-      <main>
+      <main id="main" tabIndex={-1} className="outline-none">
         {/* HERO — comic halftone + op-art rings */}
         <section className="hero-zone relative">
           <div className="wrap relative z-10 pb-16 pt-8 md:pb-24 md:pt-14">
@@ -144,8 +136,7 @@ function Index() {
         <div className="about-zone zone-dark"><div aria-hidden="true" className="dither" />
           <section id="about" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
-              <Label>{c.about.label}</Label>
-              <h2 className="h2">{c.about.title}</h2>
+              <SectionHead id="about" title={c.about.title} />
             </div>
             <div className="about-copy prose-cs space-y-5 text-mute md:mt-9">
               {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
@@ -165,8 +156,7 @@ function Index() {
         {/* PROGRAMS — a distinct animated print texture for every layer */}
         <section id="programs" className="programs-zone reveal">
           <div className="wrap relative z-10 pt-20 md:pt-28 pb-24 md:pb-32">
-          <Label>{c.programs.label}</Label>
-          <div className="relative"><h2 className="h2 mb-12">{c.programs.title}</h2><Burst className="-top-10 right-0 hidden sm:block">4<br/>layers</Burst></div>
+          <div className="relative mb-12"><SectionHead id="programs" title={c.programs.title} /><Burst className="-top-10 right-0 hidden sm:block">4<br/>layers</Burst></div>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {c.programs.items.map((p, i) => (
               <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
@@ -195,8 +185,8 @@ function Index() {
                 <p className="summit-caption mono mt-4">{c.summit.caption}</p>
               </div>
               <div className="summit-copy md:mt-6">
-                <p className="mono mb-4 opacity-80">{c.summit.label}</p>
-                <h2 className="h2 mb-6">{c.summit.title}</h2>
+                <p className="mono mb-4 opacity-80">03 / Summit · {c.summit.label}</p>
+                <div className="h2-wrap mb-6"><h2 className="h2">{c.summit.title}</h2></div>
                 <p className="prose-cs opacity-85">{c.summit.body}</p>
                 <p className="mono mt-8 mb-2 opacity-70">{c.summit.supportLabel}</p>
                 <p className="prose-cs">{c.summit.supporters.join(", ")}.</p>
@@ -220,8 +210,7 @@ function Index() {
           <div aria-hidden="true" className="stack-schematic pointer-events-none absolute"><span /><span /><span /></div>
           <section id="leadership" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
-              <Label>{c.leadership.label}</Label>
-              <h2 className="h2 mb-5">{c.leadership.title}</h2>
+              <SectionHead id="leadership" title={c.leadership.title} className="mb-5" />
               <p className="mb-8 text-mute">{c.leadership.line}</p>
               <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
             </div>
@@ -242,8 +231,7 @@ function Index() {
           <section id="join" className="wrap reveal relative z-10 py-24 md:py-32"><Reg className="right-4 top-6" />
             <div className="grid gap-10 md:grid-cols-2 md:gap-16">
               <div>
-                <Label>{c.join.label}</Label>
-                <h2 className="h2">{c.join.title}</h2>
+                <SectionHead id="join" title={c.join.title} />
                 <div className="relative mt-10 hidden h-36 md:block"><Burst className="left-0 top-0" tone="green">Join<br/>now!</Burst></div>
               </div>
               <ol className="brut join-steps px-5">
@@ -299,6 +287,7 @@ function Index() {
         <p className="text-mute">{c.footer.line}</p>
         <p className="mono text-mute">{c.footer.copyright}</p>
       </footer></div>
+      <BrutToaster />
     </div>
   );
 }
