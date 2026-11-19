@@ -69,6 +69,13 @@ function ProgramPattern({ type }: { type: string }) {
   );
 }
 
+function Burst({ children, className = "", tone = "" }: { children: ReactNode; className?: string; tone?: string }) {
+  return <div aria-hidden="true" className={`burst-wrap ${className}`}><div className={`burst ${tone}`}>{children}</div></div>;
+}
+function Reg({ className }: { className: string }) {
+  return <span aria-hidden="true" className={`reg-mark ${className}`}><i /></span>;
+}
+
 function Index() {
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
   return (
@@ -104,7 +111,7 @@ function Index() {
                 <a href="#programs" className="btn btn-outline">{c.hero.secondary}</a>
               </div>
             </div>
-            <div className="brut chapter-card self-start">
+            <div className="relative self-start"><Burst className="-right-6 -top-14" tone="green">Est.<br/>UofA!</Burst><div className="brut chapter-card">
               <div className="flex items-center justify-between border-b-3 border-ink bg-yellow px-4 py-3">
                 <span className="mono">{c.hero.cardLabel}</span>
                 <span className="flex gap-1">
@@ -119,9 +126,10 @@ function Index() {
                   </div>
                 ))}
               </dl>
-            </div>
+            </div></div>
           </div>
           </div>
+          <Reg className="left-4 top-4" /><Reg className="bottom-4 right-4" />
         </section>
 
         <div className="marquee" aria-hidden="true">
@@ -142,7 +150,7 @@ function Index() {
             <div className="about-copy prose-cs space-y-5 text-mute md:mt-9">
               {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
             </div>
-            <div className="term relative scanlines md:col-span-2">
+            <div className="term tape relative scanlines md:col-span-2">
               <div className="term-bar"><span>uofa@colorstack:~</span><span>[_][□][x]</span></div>
               <pre>{`> whoami
   black_and_latinx_students --in computing --at uofa
@@ -158,7 +166,7 @@ function Index() {
         <section id="programs" className="programs-zone reveal">
           <div className="wrap relative z-10 pt-20 md:pt-28 pb-24 md:pb-32">
           <Label>{c.programs.label}</Label>
-          <h2 className="h2 mb-12">{c.programs.title}</h2>
+          <div className="relative"><h2 className="h2 mb-12">{c.programs.title}</h2><Burst className="-top-10 right-0 hidden sm:block">4<br/>layers</Burst></div>
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {c.programs.items.map((p, i) => (
               <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
@@ -231,11 +239,12 @@ function Index() {
         {/* JOIN — rotating pixel sun + halftone fade */}
         <div className="zigzag-divider zigzag-dark" aria-hidden="true" />
         <div className="join-zone zone-dark">
-          <section id="join" className="wrap reveal relative z-10 py-24 md:py-32">
+          <section id="join" className="wrap reveal relative z-10 py-24 md:py-32"><Reg className="right-4 top-6" />
             <div className="grid gap-10 md:grid-cols-2 md:gap-16">
               <div>
                 <Label>{c.join.label}</Label>
                 <h2 className="h2">{c.join.title}</h2>
+                <div className="relative mt-10 hidden h-36 md:block"><Burst className="left-0 top-0" tone="green">Join<br/>now!</Burst></div>
               </div>
               <ol className="brut join-steps px-5">
                 {c.join.steps.map((s, i) => (
