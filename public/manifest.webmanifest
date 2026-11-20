@@ -1,0 +1,16 @@
+{
+  "name": "ColorStack UofA",
+  "short_name": "ColorStack UofA",
+  "description": "The University of Alberta student chapter of ColorStack. A community for Black and Latinx students in computing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6ee",
+  "theme_color": "#050806",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

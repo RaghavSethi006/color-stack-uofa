@@ -7,12 +7,20 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  nitro: {
+    preset: "node-server",
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
   },
   vite: {
+    server: {
+      host: "0.0.0.0",
+      port: 3000,
+      allowedHosts: true,
+    },
     // Pre-bundle Radix with React in the first pass so a late re-optimization can't load a second React copy.
     optimizeDeps: { include: ["@radix-ui/react-accordion", "@radix-ui/react-dialog", "sonner", "lucide-react"] },
   },

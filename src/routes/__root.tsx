@@ -11,26 +11,37 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { site } from "@/config/site";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+const TERMINAL_BOOT_SCRIPT = `try{if(localStorage.getItem("cs-terminal-mode")==="1")document.documentElement.classList.add("terminal-mode")}catch(e){}`;
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+    <div className="zone-dark flex min-h-screen items-center justify-center px-4 py-12">
+      <main className="term scanlines w-full max-w-xl" aria-labelledby="nf-title">
+        <div className="term-bar">
+          <span>uofa@colorstack:~/404</span>
+          <span aria-hidden="true">[!][□][x]</span>
         </div>
-      </div>
+        <div className="p-6 sm:p-8">
+          <p className="mono mb-3 text-orange">ERR_LAYER_MISSING · EXIT 404</p>
+          <h1 id="nf-title" className="font-display text-4xl leading-none font-black uppercase text-yellow sm:text-5xl">
+            404: layer not found
+          </h1>
+          <pre className="mt-4 !p-0 text-sm text-slab-fg">
+{`> ls ./routes
+  /
+> cat ./status
+  That layer isn't in the stack. Head back to the chapter page.`}
+          </pre>
+          <div className="mt-7 flex flex-wrap gap-4">
+            <Link to="/" className="btn btn-outline whitespace-nowrap">
+              $ cd /home
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
@@ -43,32 +54,37 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Try again
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
+    <div className="zone-dark flex min-h-screen items-center justify-center px-4 py-12">
+      <main className="term scanlines w-full max-w-xl" aria-labelledby="err-title">
+        <div className="term-bar">
+          <span>uofa@colorstack:~/panic</span>
+          <span aria-hidden="true">[!][□][x]</span>
         </div>
-      </div>
+        <div className="p-6 sm:p-8">
+          <p className="mono mb-3 text-orange">ERR_STACK_FAULT · EXIT 500</p>
+          <h1 id="err-title" className="font-display text-3xl leading-none font-black uppercase text-yellow sm:text-4xl">
+            This layer crashed
+          </h1>
+          <p className="mt-4 text-sm text-slab-fg">
+            Something broke while rendering this route. Retry the stack or head back home.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                router.invalidate();
+                reset();
+              }}
+              className="btn btn-outline whitespace-nowrap"
+            >
+              $ retry
+            </button>
+            <Link to="/" className="btn btn-solid whitespace-nowrap">
+              $ cd /home
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
@@ -77,16 +93,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "theme-color", content: "#050806" },
+      { property: "og:site_name", content: "ColorStack UofA" },
       { title: "ColorStack UofA" },
       { name: "description", content: "The University of Alberta chapter of ColorStack." },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "canonical", href: site.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -106,6 +124,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: TERMINAL_BOOT_SCRIPT }} />
       </head>
       <body>
         {children}

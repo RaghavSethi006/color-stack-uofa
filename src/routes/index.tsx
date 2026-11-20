@@ -1,49 +1,58 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type { ReactNode } from "react";
-import * as Acc from "@radix-ui/react-accordion";
-import logo from "@/assets/colorstack-uofa-logo.png.asset.json";
 import { content as c } from "@/content";
-import { SiteChrome, SkipLink, SectionHead } from "@/components/site/SiteChrome";
+import {
+  COLORSTACK_URL,
+  EMAIL,
+  INSTAGRAM_URL,
+  LINKEDIN_URL,
+  site,
+} from "@/config/site";
+import { buildOrganizationJsonLd } from "@/lib/faq";
+import { SiteChrome, SkipLink, SectionHead, BrandLogo } from "@/components/site/SiteChrome";
 import { BrutToaster } from "@/components/site/BrutToaster";
-import { COLORSTACK_URL, EMAIL, INSTAGRAM_URL, LINKEDIN_URL, SIGNUP_URL, SLACK_URL } from "@/config/site";
+import { EdmontonTime, StatStrip, useWordmarkMotion } from "@/components/site/HeroBits";
+import { Terminal, GitLog } from "@/components/site/Terminal";
+import { ProgramsStack } from "@/components/site/ProgramsStack";
+import { EventsSection } from "@/components/site/EventsSection";
+import { SummitSection } from "@/components/site/SummitSection";
+import { LeadershipAndPartner } from "@/components/site/LeadershipAndPartner";
+import { JoinSection } from "@/components/site/JoinSection";
+import {
+  BackToTopCli,
+  IntroOverlay,
+  KonamiRain,
+  TerminalModeToggle,
+} from "@/components/site/EasterEggsAndIntro";
+import { Burst, Ext, Reg } from "@/components/site/bits";
+import { usePauseOffscreen } from "@/components/site/hooks";
+
+const title = "ColorStack UofA | Black and Latinx students in computing";
+const description =
+  "The University of Alberta chapter of ColorStack. A community for Black and Latinx students in computing, run by students in Edmonton.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ColorStack UofA | Black and Latinx students in computing" },
-      { name: "description", content: "The University of Alberta chapter of ColorStack. A community for Black and Latinx students in computing, run by students in Edmonton." },
+      { title },
+      { name: "description", content: description },
       { property: "og:title", content: "ColorStack UofA" },
-      { property: "og:description", content: "A community for Black and Latinx students in computing at the University of Alberta." },
+      { property: "og:description", content: description },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: site.url },
+      { property: "og:image", content: `${site.url}${site.ogImage}` },
+      { property: "og:image:alt", content: site.ogImageAlt },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ColorStack UofA" },
+      { name: "twitter:description", content: description },
+      { name: "twitter:image", content: `${site.url}${site.ogImage}` },
+      { name: "twitter:image:alt", content: site.ogImageAlt },
     ],
+    links: [{ rel: "canonical", href: site.url }],
   }),
   component: Index,
 });
 
 const colorVar = (k: string) => `var(--${k})`;
-
-function Ext({ href, children, className = "", button }: { href: string; children: ReactNode; className?: string; button?: boolean }) {
-  if (!href) {
-    return <span className={`mono text-mute ${button ? "inline-block py-3" : ""}`} aria-disabled="true">{typeof children === "string" ? `${children}: ` : ""}{c.comingSoon}</span>;
-  }
-  const isMail = href.startsWith("mailto:");
-  return (
-    <a href={href} className={className} {...(isMail ? {} : { target: "_blank", rel: "noopener noreferrer" })}>
-      {children}
-    </a>
-  );
-}
-
-
-function Brand() {
-  return (
-    <a href="#top" className="flex min-w-0 items-center gap-3 font-semibold">
-      <img src={logo.url} alt="" className="h-8 w-8 shrink-0" width={32} height={32} />
-      <span className="truncate">{c.brand}</span>
-    </a>
-  );
-}
 
 const ASCII = String.raw`
   ___  ___  _     ___  ___  ___ _____ _   ___ _  __
@@ -51,242 +60,203 @@ const ASCII = String.raw`
 | (__| (_) | |__| (_) |   /\__ \ | |/ _ \ (__| ' <
  \___|\___/|____|\___/|_|_\|___/ |_/_/ \_\___|_|\_\   // UOFA`;
 
-const ticker = ["Black & Latinx in computing", "University of Alberta", "Edmonton", "Community", "Careers", "Summit", "Build together"];
-const programPatterns = ["triangles", "blocks", "chevrons", "pluses"];
-
-function ProgramPattern({ type }: { type: string }) {
-  return (
-    <div aria-hidden="true" className={`pattern-canvas shape-pattern shape-${type}`}>
-      <div className="shape-track">
-        {[0, 1].map((group) => (
-          <div className="shape-set" key={group}>
-            {Array.from({ length: 6 }, (_, i) => <span key={i} />)}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Burst({ children, className = "", tone = "" }: { children: ReactNode; className?: string; tone?: string }) {
-  return <div aria-hidden="true" className={`burst-wrap ${className}`}><div className={`burst ${tone}`}>{children}</div></div>;
-}
-function Reg({ className }: { className: string }) {
-  return <span aria-hidden="true" className={`reg-mark ${className}`}><i /></span>;
-}
+const ticker = [
+  "Black & Latinx in computing",
+  "University of Alberta",
+  "Edmonton",
+  "Community",
+  "Careers",
+  "Summit",
+  "Build together",
+];
 
 function Index() {
+  usePauseOffscreen("main > *, footer");
+  const wordmarkRef = useWordmarkMotion();
   const mail = EMAIL ? `mailto:${EMAIL}` : "";
+  const orgLd = buildOrganizationJsonLd(site.url, [INSTAGRAM_URL, LINKEDIN_URL, COLORSTACK_URL]);
+
   return (
     <div id="top">
+      <IntroOverlay />
+      <KonamiRain />
       <SkipLink />
       <SiteChrome />
 
       <main id="main" tabIndex={-1} className="outline-none">
-        {/* HERO — comic halftone + op-art rings */}
+        {/* HERO — comic halftone + pointer parallax + exploded scroll + live time + stat strip */}
         <section className="hero-zone relative">
           <div className="wrap relative z-10 pb-16 pt-8 md:pb-24 md:pt-14">
-          <p className="hero-kicker mono mb-6 text-mute">{c.hero.kicker}</p>
-          <h1 className="mb-12 md:mb-16">
-            <span className="sr-only">{c.hero.srTitle}</span>
-            <span className="wordmark" aria-hidden="true">
-              {["l1", "l2", "l3"].map((l) => (
-                <span key={l} className={l}>COLOR<br className="br" />STACK</span>
-              ))}
-            </span>
-          </h1>
-          <div className="grid gap-12 min-[860px]:grid-cols-[1.25fr_1fr] min-[860px]:gap-16">
-            <div className="hero-copy self-start">
-              <p className="max-w-[30ch] text-[22px] font-medium leading-[1.35] md:text-[28px]">{c.hero.lead}</p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a href="#join" className="btn btn-solid">{c.hero.primary}</a>
-                <a href="#programs" className="btn btn-outline">{c.hero.secondary}</a>
+            <p className="hero-kicker mono mb-6 text-mute">{c.hero.kicker}</p>
+            <h1 className="mb-12 md:mb-16">
+              <span className="sr-only">{c.hero.srTitle}</span>
+              <span ref={wordmarkRef} className="wordmark" aria-hidden="true">
+                {["l1", "l2", "l3"].map((l) => (
+                  <span key={l} className={l}>
+                    COLOR
+                    <br className="br" />
+                    STACK
+                  </span>
+                ))}
+              </span>
+            </h1>
+
+            <div className="grid gap-12 min-[860px]:grid-cols-[1.25fr_1fr] min-[860px]:gap-16">
+              <div className="hero-copy self-start">
+                <p className="max-w-[30ch] text-[22px] font-medium leading-[1.35] md:text-[28px]">
+                  {c.hero.lead}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <a href="#join" className="btn btn-solid whitespace-nowrap">
+                    {c.hero.primary}
+                  </a>
+                  <a href="#programs" className="btn btn-outline whitespace-nowrap">
+                    {c.hero.secondary}
+                  </a>
+                </div>
+              </div>
+
+              <div className="chapter-wrap relative self-start">
+                <Burst className="-right-1 -top-12 md:-right-6 md:-top-14" tone="green">
+                  Est.
+                  <br />
+                  UofA!
+                </Burst>
+                <div className="brut chapter-card">
+                  <div className="flex items-center justify-between border-b-3 border-ink bg-yellow px-4 py-3 text-slab">
+                    <span className="mono">{c.hero.cardLabel}</span>
+                    <span className="flex gap-1" aria-hidden="true">
+                      {["orange", "cobalt", "yellow", "green"].map((k) => (
+                        <span key={k} className="h-2.5 w-2.5" style={{ background: colorVar(k) }} />
+                      ))}
+                    </span>
+                  </div>
+                  <dl>
+                    {c.hero.rows.map(([k, v], i) => (
+                      <div key={k} className={`grid grid-cols-[7.5rem_1fr] gap-3 px-4 py-3 ${i ? "border-t" : ""}`}>
+                        <dt className="mono pt-[3px] text-mute">{k}</dt>
+                        <dd className="text-[15px] leading-snug">{v}</dd>
+                      </div>
+                    ))}
+                    <div className="grid grid-cols-[7.5rem_1fr] gap-3 border-t px-4 py-3">
+                      <dt className="mono pt-[3px] text-mute">Local time</dt>
+                      <dd className="text-[15px] leading-snug">
+                        <EdmontonTime />
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             </div>
-            <div className="relative self-start"><Burst className="-right-6 -top-14" tone="green">Est.<br/>UofA!</Burst><div className="brut chapter-card">
-              <div className="flex items-center justify-between border-b-3 border-ink bg-yellow px-4 py-3">
-                <span className="mono">{c.hero.cardLabel}</span>
-                <span className="flex gap-1">
-                  {["orange", "cobalt", "yellow", "green"].map((k) => <span key={k} className="h-2.5 w-2.5" style={{ background: colorVar(k) }} />)}
-                </span>
-              </div>
-              <dl>
-                {c.hero.rows.map(([k, v], i) => (
-                  <div key={k} className={`grid grid-cols-[7.5rem_1fr] gap-3 px-4 py-3 ${i ? "border-t" : ""}`}>
-                    <dt className="mono pt-[3px] text-mute">{k}</dt>
-                    <dd className="text-[15px] leading-snug">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div></div>
+
+            <StatStrip />
           </div>
-          </div>
-          <Reg className="left-4 top-4" /><Reg className="bottom-4 right-4" />
+          <Reg className="left-4 top-4" />
+          <Reg className="bottom-4 right-4" />
         </section>
 
-        <div className="marquee" aria-hidden="true">
+        <div className="marquee" aria-hidden="true" tabIndex={-1}>
           <div>
-            {[0, 1].map((k) => ticker.map((t) => (
-              <span key={k + t} className="mono flex items-center gap-4 px-4 py-3 text-[14px] font-medium text-ink">{t}<span className="h-2.5 w-2.5 bg-ink" /></span>
-            )))}
+            {[0, 1].map((k) =>
+              ticker.map((t) => (
+                <span key={k + t} className="mono flex items-center gap-4 px-4 py-3 text-[14px] font-medium text-ink">
+                  {t}
+                  <span className="h-2.5 w-2.5 bg-ink" />
+                </span>
+              )),
+            )}
           </div>
         </div>
 
-        {/* ABOUT — terminal output + drifting ASCII columns */}
-        <div className="about-zone zone-dark"><div aria-hidden="true" className="dither" />
+        {/* 01 / ABOUT — real interactive terminal + git log milestones */}
+        <div className="about-zone zone-dark">
+          <div aria-hidden="true" className="dither" />
           <section id="about" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
             <div>
               <SectionHead id="about" title={c.about.title} />
             </div>
             <div className="about-copy prose-cs space-y-5 text-mute md:mt-9">
-              {c.about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
+              {c.about.paragraphs.map((p) => (
+                <p key={p.slice(0, 20)}>{p}</p>
+              ))}
             </div>
-            <div className="term tape relative scanlines md:col-span-2">
-              <div className="term-bar"><span>uofa@colorstack:~</span><span>[_][□][x]</span></div>
-              <pre>{`> whoami
-  black_and_latinx_students --in computing --at uofa
-> ls ./chapter
-  community/  academics/  careers/  summit/
-> ./join --chapter uofa `}<span className="caret" /></pre>
-            </div>
+            <Terminal />
+            <GitLog />
           </section>
         </div>
         <div className="zigzag-divider" aria-hidden="true" />
 
-        {/* PROGRAMS — a distinct animated print texture for every layer */}
+        {/* 02 / PROGRAMS — physical stack of four layers */}
         <section id="programs" className="programs-zone reveal">
-          <div className="wrap relative z-10 pt-20 md:pt-28 pb-24 md:pb-32">
-          <div className="relative mb-12"><SectionHead id="programs" title={c.programs.title} /><Burst className="-top-10 right-0 hidden sm:block">4<br/>layers</Burst></div>
-          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-            {c.programs.items.map((p, i) => (
-              <article key={p.name} className="layer-card overflow-hidden" style={{ ["--c" as string]: colorVar(p.color) }}>
-                <ProgramPattern type={programPatterns[i] ?? "triangles"} />
-                <p className="mono mb-6 flex items-center gap-2">
-                  <span className="h-3.5 w-3.5 shrink-0" style={{ background: colorVar(p.color) }} />
-                  Layer / {p.name}
-                </p>
-                <h3 className="mb-3 font-display text-[26px] leading-[1.02]" style={{ fontVariationSettings: '"wdth" 78, "wght" 800' }}>{p.title}</h3>
-                <p className="text-[15px] text-mute">{p.body}</p>
-              </article>
-            ))}
-          </div>
+          <div className="wrap relative z-10 pb-24 pt-20 md:pb-32 md:pt-28">
+            <div className="relative mb-12">
+              <SectionHead id="programs" title={c.programs.title} />
+              <Burst className="-top-10 right-0 hidden sm:block">
+                4<br />
+                layers
+              </Burst>
+            </div>
+            <ProgramsStack />
           </div>
         </section>
 
-        {/* SUMMIT — kinetic chevrons + animated flight path */}
-        <section id="summit" className="summit-zone slab zone-dark bg-slab py-20 text-slab-fg md:py-24">
-          <div aria-hidden="true" className="kinetic-bars pointer-events-none absolute">
-            {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ["--i" as string]: i }} />)}
-          </div>
-          <div className="wrap reveal relative z-10">
-            <div className="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
-              <div className="relative isolate">
-                <p className="summit-numeral font-display leading-[0.8] text-yellow" style={{ fontVariationSettings: '"wdth" 62, "wght" 900', fontSize: "clamp(9rem, 26vw, 20rem)" }}>{c.summit.numeral}</p>
-                <p className="summit-caption mono mt-4">{c.summit.caption}</p>
-              </div>
-              <div className="summit-copy md:mt-6">
-                <p className="mono mb-4 opacity-80">03 / Summit · {c.summit.label}</p>
-                <div className="h2-wrap mb-6"><h2 className="h2">{c.summit.title}</h2></div>
-                <p className="prose-cs opacity-85">{c.summit.body}</p>
-                <p className="mono mt-8 mb-2 opacity-70">{c.summit.supportLabel}</p>
-                <p className="prose-cs">{c.summit.supporters.join(", ")}.</p>
-              </div>
-            </div>
-            <svg viewBox="0 0 1000 170" className="mt-14 w-full" role="img" aria-label={`Route from Edmonton (${c.summit.route.from}) to San Francisco (${c.summit.route.to}), ${c.summit.route.distance}`}>
-              <path className="route-path" d="M40 140 Q500 -40 960 140" fill="none" />
-              <polygon className="route-node" points="40,127 53,140 40,153 27,140" fill="var(--yellow)" />
-              <polygon className="route-node route-node-late" points="960,127 973,140 960,153 947,140" fill="var(--yellow)" />
-              <g fill="var(--slab-fg)" fontFamily="DM Mono, monospace" fontSize="15" letterSpacing="1.5">
-                <text x="40" y="168" textAnchor="middle">{c.summit.route.from}</text>
-                <text x="960" y="168" textAnchor="middle">{c.summit.route.to}</text>
-                <text x="500" y="38" textAnchor="middle">{c.summit.route.distance.toUpperCase()}</text>
-              </g>
-            </svg>
-          </div>
-        </section>
+        {/* 03 / EVENTS — data-driven calendar with filters, ICS, and empty state */}
+        <EventsSection />
 
-        {/* LEADERSHIP — technical graph paper + floating Y2K wireframe */}
-        <div className="leadership-zone">
-          <div aria-hidden="true" className="stack-schematic pointer-events-none absolute"><span /><span /><span /></div>
-          <section id="leadership" className="wrap reveal relative z-10 grid gap-10 py-20 md:grid-cols-2 md:gap-16 md:py-28">
-            <div>
-              <SectionHead id="leadership" title={c.leadership.title} className="mb-5" />
-              <p className="mb-8 text-mute">{c.leadership.line}</p>
-              <Ext href={mail || INSTAGRAM_URL} className="btn btn-outline" button>{c.leadership.cta}</Ext>
-            </div>
-            <dl className="wire leadership-list bg-background px-5 py-2">
-              {c.leadership.roles.map(([r, d]) => (
-                <div key={r} className="grid gap-1 border-b border-dashed py-4 last:border-b-0 sm:grid-cols-[10rem_1fr] sm:gap-4">
-                  <dt className="mono pt-[3px]">{r}</dt>
-                  <dd className="text-mute">{d}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        </div>
+        {/* 04 / SUMMIT — count-up, drawn route, boarding pass, photo strip, supporter stickers */}
+        <SummitSection />
 
-        {/* JOIN — rotating pixel sun + halftone fade */}
-        <div className="zigzag-divider zigzag-dark" aria-hidden="true" />
-        <div className="join-zone zone-dark">
-          <section id="join" className="wrap reveal relative z-10 py-24 md:py-32"><Reg className="right-4 top-6" />
-            <div className="grid gap-10 md:grid-cols-2 md:gap-16">
-              <div>
-                <SectionHead id="join" title={c.join.title} />
-                <div className="relative mt-10 hidden h-36 md:block"><Burst className="left-0 top-0" tone="green">Join<br/>now!</Burst></div>
-              </div>
-              <ol className="brut join-steps px-5">
-                {c.join.steps.map((s, i) => (
-                  <li key={s.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-dashed py-6 last:border-b-0">
-                    <span className="font-mono text-[40px] leading-none" style={{ color: colorVar(["orange", "yellow", "green"][i] ?? "ink") }}>{i + 1}</span>
-                    <div>
-                      <h3 className="mb-2 text-xl font-semibold">{s.title}</h3>
-                      {s.body && <p className="mb-4 text-mute">{s.body}</p>}
-                      {i === 0 && <Ext href={COLORSTACK_URL} className="btn btn-solid mt-1">{s.cta}</Ext>}
-                      {i === 1 && <div className="mt-2"><Ext href={SIGNUP_URL} className="btn btn-solid" button>{s.cta}</Ext></div>}
-                      {i === 2 && (
-                        <div className="flex flex-wrap gap-x-6 gap-y-2">
-                          <Ext href={SLACK_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Slack</Ext>
-                          <Ext href={INSTAGRAM_URL} className="font-semibold underline underline-offset-4 hover:text-cobalt">Instagram</Ext>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
+        {/* 05 / LEADERSHIP & PARTNER BAND */}
+        <LeadershipAndPartner />
 
-            <Acc.Root type="single" collapsible className="wire mt-16 bg-background px-5 md:ml-[calc(50%+2rem)]">
-              {c.join.faqs.map((f) => (
-                <Acc.Item key={f.q} value={f.q} className="border-b border-dashed last:border-b-0">
-                  <Acc.Header>
-                    <Acc.Trigger className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold hover:text-cobalt">
-                      {f.q}
-                      <span className="faq-plus font-mono text-2xl leading-none" aria-hidden="true">+</span>
-                    </Acc.Trigger>
-                  </Acc.Header>
-                  <Acc.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-                    <p className="prose-cs pb-5 text-mute">{f.a}</p>
-                  </Acc.Content>
-                </Acc.Item>
-              ))}
-            </Acc.Root>
-          </section>
-        </div>
+        {/* 06 / JOIN & FAQ */}
+        <JoinSection />
       </main>
 
       <div className="stack-bar" aria-hidden="true" />
-      <div className="zone-dark"><footer className="wrap grid gap-6 py-12">
-        <pre aria-hidden="true" className="ascii">{ASCII}</pre>
-        <Brand />
-        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
-          <Ext href={INSTAGRAM_URL} className="hover:text-cobalt hover:underline">Instagram</Ext>
-          <Ext href={mail} className="hover:text-cobalt hover:underline">Email</Ext>
-          <Ext href={LINKEDIN_URL} className="hover:text-cobalt hover:underline">LinkedIn</Ext>
-          <Ext href={COLORSTACK_URL} className="hover:text-cobalt hover:underline">ColorStack National</Ext>
-        </nav>
-        <p className="text-mute">{c.footer.line}</p>
-        <p className="mono text-mute">{c.footer.copyright}</p>
-      </footer></div>
+      <div className="zone-dark overflow-x-clip">
+        <footer className="wrap grid gap-6 py-12">
+          <div className="flex flex-wrap items-start justify-between gap-6">
+            <pre aria-hidden="true" className="ascii ascii-cycle">
+              {ASCII}
+            </pre>
+            <div className="flex flex-wrap items-center gap-3">
+              <TerminalModeToggle />
+              <BackToTopCli />
+            </div>
+          </div>
+
+          <BrandLogo />
+
+          <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Ext href={INSTAGRAM_URL} className="hover:text-yellow hover:underline">
+              Instagram
+            </Ext>
+            <Ext
+              href={mail}
+              className="hover:text-yellow hover:underline"
+              why="Chapter email is not published yet — message us on Instagram."
+            >
+              Email
+            </Ext>
+            <Ext
+              href={LINKEDIN_URL}
+              className="hover:text-yellow hover:underline"
+              why="Chapter LinkedIn page is coming soon."
+            >
+              LinkedIn
+            </Ext>
+            <Ext href={COLORSTACK_URL} className="hover:text-yellow hover:underline">
+              ColorStack National
+            </Ext>
+          </nav>
+
+          <p className="text-mute">{c.footer.line}</p>
+          <p className="mono text-mute">{c.footer.copyright}</p>
+        </footer>
+      </div>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
       <BrutToaster />
     </div>
   );

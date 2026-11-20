@@ -30,6 +30,8 @@ export type Faq = { q: string; a: string | null };
 
 export const site = {
   url: "https://colorstackuofa.ca", // TODO: replace with the real domain once published
+  ogImage: "/og-image.jpg",
+  ogImageAlt: "ColorStack UofA neo-brutalist zine poster reading COLORSTACK UOFA with an Edmonton, AB terminal badge",
   links: {
     instagram: "https://www.instagram.com/colorstackuofa/",
     colorstack: "https://www.colorstack.org",
@@ -79,7 +81,16 @@ export const EMAIL = site.contact.email;
 export const sections = [
   { id: "about", label: "About", color: "orange" },
   { id: "programs", label: "Programs", color: "cobalt" },
+  { id: "events", label: "Events", color: "yellow" },
+  { id: "summit", label: "Summit", color: "green" },
+  { id: "leadership", label: "Leadership", color: "orange" },
+  { id: "join", label: "Join", color: "cobalt" },
+] as const;
+
+/** Four-segment top stack progress bar mapping. */
+export const stackSegments = [
+  { id: "about", label: "About", color: "orange" },
+  { id: "programs", label: "Programs", color: "cobalt" },
   { id: "summit", label: "Summit", color: "yellow" },
-  { id: "leadership", label: "Leadership", color: "green" },
-  { id: "join", label: "Join", color: "orange" },
+  { id: "join", label: "Join", color: "green" },
 ] as const;
