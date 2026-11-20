@@ -86,7 +86,7 @@ export function SiteChrome() {
 /** "01 / About" label + h2 with a copy-link button that toasts. */
 export function SectionHead({ id, title, className = "" }: { id: string; title: string; className?: string }) {
   const i = sections.findIndex((x) => x.id === id);
-  const label = i >= 0 ? `${pad(i + 1)} / ${sections[i].label}` : id;
+  const label = i >= 0 ? `${pad(i + 1)} / ${sections[i]?.label}` : id;
   const copy = async () => {
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
     try { await navigator.clipboard.writeText(url); toast(`Copied link to ${sections[i]?.label ?? id}`); }

@@ -748,3 +748,6 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 @media (prefers-reduced-motion: reduce) {
   .stack-progress-seg > span, .join-bar, .skip-link { transition: none !important; }
 }
+@media (min-width: 768px) { .join-bar { display: none; } }
+.drawer .term-bar { display: flex; justify-content: space-between; align-items: center; }
+.drawer .btn-solid { background: var(--yellow); color: var(--slab); position: relative; z-index: 2; }
